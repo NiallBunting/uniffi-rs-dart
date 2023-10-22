@@ -18,6 +18,7 @@ pub mod kotlin;
 pub mod python;
 pub mod ruby;
 pub mod swift;
+pub mod dart;
 
 /// Enumeration of all foreign language targets currently supported by this crate.
 ///
@@ -32,6 +33,7 @@ pub enum TargetLanguage {
     Swift,
     Python,
     Ruby,
+    Dart,
 }
 
 impl fmt::Display for TargetLanguage {
@@ -41,6 +43,7 @@ impl fmt::Display for TargetLanguage {
             Self::Swift => write!(f, "swift"),
             Self::Python => write!(f, "python"),
             Self::Ruby => write!(f, "ruby"),
+            Self::Dart => write!(f, "dart"),
         }
     }
 }
@@ -67,6 +70,7 @@ impl TryFrom<&str> for TargetLanguage {
             "swift" => TargetLanguage::Swift,
             "python" | "py" => TargetLanguage::Python,
             "ruby" | "rb" => TargetLanguage::Ruby,
+            "dart" => TargetLanguage::Dart,
             _ => bail!("Unknown or unsupported target language: \"{value}\""),
         })
     }
@@ -99,6 +103,8 @@ pub struct Config {
     pub(crate) python: python::Config,
     #[serde(default)]
     pub(crate) ruby: ruby::Config,
+    #[serde(default)]
+    pub(crate) dart: dart::Config,
 }
 
 /// Generate foreign language bindings from a compiled `uniffi` library.
@@ -120,6 +126,9 @@ pub fn write_bindings(
             python::write_bindings(&config.python, ci, out_dir, try_format_code)?
         }
         TargetLanguage::Ruby => ruby::write_bindings(&config.ruby, ci, out_dir, try_format_code)?,
+        TargetLanguage::Dart => {
+            dart::write_bindings(&config.dart, ci, out_dir, try_format_code)?
+        }
     }
     Ok(())
 }
