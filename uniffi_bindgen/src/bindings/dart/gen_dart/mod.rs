@@ -170,7 +170,7 @@ impl ImportRequirement {
 /// This template is a bit different than others in that it stores internal state from the render
 /// process.  Make sure to only call `render()` once.
 #[derive(Template)]
-#[template(syntax = "py", escape = "none", path = "Types.py")]
+#[template(syntax = "dart", escape = "none", path = "Types.dart")]
 pub struct TypeRenderer<'a> {
     python_config: &'a Config,
     ci: &'a ComponentInterface,
@@ -238,7 +238,7 @@ impl<'a> TypeRenderer<'a> {
 }
 
 #[derive(Template)]
-#[template(syntax = "py", escape = "none", path = "wrapper.py")]
+#[template(syntax = "dart", escape = "none", path = "wrapper.dart")]
 pub struct PythonWrapper<'a> {
     ci: &'a ComponentInterface,
     config: Config,
