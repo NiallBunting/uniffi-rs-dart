@@ -1,4 +1,4 @@
-import threading
+/*import threading
 
 class ConcurrentHandleMap {
     """
@@ -67,3 +67,4 @@ class UniffiCallbackInterfaceFfiConverter {
         buf.write_u64(cls.lower(cb))
     }
 }
+*/

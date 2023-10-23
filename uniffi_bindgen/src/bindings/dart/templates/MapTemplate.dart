@@ -1,17 +1,16 @@
 {%- let key_ffi_converter = key_type|ffi_converter_name %}
 {%- let value_ffi_converter = value_type|ffi_converter_name %}
 
+// Genearted by MapTemplate
 class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
-    @classmethod
-    def write(cls, items, buf) {
+    static write(cls, items, buf) {
         buf.write_i32(len(items))
         for (key, value) in items.items():
             {{ key_ffi_converter }}.write(key, buf)
             {{ value_ffi_converter }}.write(value, buf)
     }
 
-    @classmethod
-    def read(cls, buf) {
+    static read(cls, buf) {
         count = buf.read_i32()
         if count < 0:
             raise InternalError("Unexpected negative map size")

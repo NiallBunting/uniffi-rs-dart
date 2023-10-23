@@ -29,6 +29,7 @@ import 'package:ffi/ffi.dart';
 
 {% include "RustBufferTemplate.dart" %}
 {% include "Helpers.dart" %}
+{% include "RustBufferHelper.dart" %}
 
 // Contains loading, initialization code, and the FFI Function declarations.
 {% include "NamespaceLibraryTemplate.dart" %}
@@ -44,4 +45,4 @@ import 'package:ffi/ffi.dart';
 {%- include "TopLevelFunctionTemplate.dart" %}
 {%- endfor %}
 
-{% import "macros.py" as py %}
+{% import "macros.dart" as py %}
