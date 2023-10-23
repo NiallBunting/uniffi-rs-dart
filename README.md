@@ -2,12 +2,18 @@
 
 This adds a binding for UniFFI to dart the language used by flutter.
 
-This is a work in progress and currently does not work.
+This is a work in progress and should not be trusted.
 
-Please contribute if you wish.
+Please contribute to the dart bindings!
+
+### To use
+
+Use the tool as usual and use the dart language argument during the build `--language dart`.
 
 ---
-The following is from the original repo:
+
+The following README is from the original repo
+
 ---
 
 
