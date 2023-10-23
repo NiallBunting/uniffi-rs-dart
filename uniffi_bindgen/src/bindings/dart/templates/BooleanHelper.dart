@@ -1,4 +1,5 @@
-class _UniffiConverterBool(_UniffiConverterPrimitive) {
+class _UniffiConverterBool extends _UniffiConverterPrimitive {
+
     static check(cls, value) {
         return not not value
     }

@@ -1,4 +1,4 @@
-class _UniffiConverterUInt8(_UniffiConverterPrimitiveInt) {
+class _UniffiConverterUInt8 extends _UniffiConverterPrimitiveInt {
     CLASS_NAME = "u8"
     VALUE_MIN = 0
     VALUE_MAX = 2**8

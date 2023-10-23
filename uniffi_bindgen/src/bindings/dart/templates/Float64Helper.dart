@@ -1,4 +1,4 @@
-class _UniffiConverterDouble(_UniffiConverterPrimitiveFloat) {
+class _UniffiConverterDouble extends _UniffiConverterPrimitiveFloat {
     static read(buf):
         return buf.read_double()
 

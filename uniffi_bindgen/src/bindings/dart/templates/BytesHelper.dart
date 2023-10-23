@@ -1,4 +1,4 @@
-class _UniffiConverterBytes(_UniffiConverterRustBuffer) {
+class _UniffiConverterBytes extends _UniffiConverterRustBuffer {
     static read(buf) {
         size = buf.read_i32()
         if size < 0:

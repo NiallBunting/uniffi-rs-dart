@@ -1,6 +1,6 @@
 {%- let inner_ffi_converter = inner_type|ffi_converter_name %}
 
-class {{ ffi_converter_name}}(_UniffiConverterRustBuffer) {
+class {{ ffi_converter_name}} extends _UniffiConverterRustBuffer {
     @classmethod
     def write(cls, value, buf) {
         items = len(value)

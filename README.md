@@ -7,6 +7,8 @@ This is a work in progress and currently does not work.
 Please contribute if you wish.
 
 ---
+The following is from the original repo:
+---
 
 
 UniFFI is a toolkit for building cross-platform software components in Rust.

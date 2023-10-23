@@ -1,7 +1,7 @@
 {%- let key_ffi_converter = key_type|ffi_converter_name %}
 {%- let value_ffi_converter = value_type|ffi_converter_name %}
 
-class {{ ffi_converter_name }}(_UniffiConverterRustBuffer) {
+class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
     @classmethod
     def write(cls, items, buf) {
         buf.write_i32(len(items))
