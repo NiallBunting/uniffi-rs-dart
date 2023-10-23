@@ -347,14 +347,42 @@ impl PythonCodeOracle {
                 Some(suffix) => format!("_UniffiRustBuffer{suffix}"),
                 None => "_UniffiRustBuffer".to_string(),
             },
-            FfiType::ForeignBytes => "Void".to_string(),//_UniffiForeignBytes".to_string(),
-            FfiType::ForeignCallback => "Void".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+            FfiType::ForeignBytes => "Pointer<_UniffiRustCallStatus>".to_string(),//_UniffiForeignBytes".to_string(),
+            FfiType::ForeignCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
             // Pointer to an `asyncio.EventLoop` instance
             FfiType::ForeignExecutorHandle => "Size".to_string(),
-            FfiType::ForeignExecutorCallback => "Void".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
+            FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
             FfiType::RustFutureHandle => "Pointer".to_string(),
-            FfiType::RustFutureContinuationCallback => "Void".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+            FfiType::RustFutureContinuationCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
             FfiType::RustFutureContinuationData => "Size".to_string(),
+        }
+    }
+
+    fn ffi_type_label_dart(ffi_type: &FfiType) -> String {
+        match ffi_type {
+            FfiType::Int8 => "int".to_string(),
+            FfiType::UInt8 => "int".to_string(),
+            FfiType::Int16 => "int".to_string(),
+            FfiType::UInt16 => "int".to_string(),
+            FfiType::Int32 => "int".to_string(),
+            FfiType::UInt32 => "int".to_string(),
+            FfiType::Int64 => "int".to_string(),
+            FfiType::UInt64 => "int".to_string(),
+            FfiType::Float32 => "double".to_string(),
+            FfiType::Float64 => "double".to_string(),
+            FfiType::RustArcPtr(_) => "Pointer".to_string(),
+            FfiType::RustBuffer(maybe_suffix) => match maybe_suffix {
+                Some(suffix) => format!("_UniffiRustBuffer{suffix}"),
+                None => "_UniffiRustBuffer".to_string(),
+            },
+            FfiType::ForeignBytes => "Pointer<_UniffiRustCallStatus>".to_string(),//_UniffiForeignBytes".to_string(),
+            FfiType::ForeignCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+            // Pointer to an `asyncio.EventLoop` instance
+            FfiType::ForeignExecutorHandle => "int".to_string(),
+            FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
+            FfiType::RustFutureHandle => "Pointer".to_string(),
+            FfiType::RustFutureContinuationCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+            FfiType::RustFutureContinuationData => "int".to_string(),
         }
     }
 
@@ -471,6 +499,11 @@ pub mod filters {
     /// Get the Python syntax for representing a given low-level `FfiType`.
     pub fn ffi_type_name(type_: &FfiType) -> Result<String, askama::Error> {
         Ok(PythonCodeOracle::ffi_type_label(type_))
+    }
+
+    /// Get the Python syntax for representing a given low-level `FfiType`.
+    pub fn ffi_type_name_dart(type_: &FfiType) -> Result<String, askama::Error> {
+        Ok(PythonCodeOracle::ffi_type_label_dart(type_))
     }
 
     /// Get the idiomatic Python rendering of a class name (for enums, records, errors, etc).

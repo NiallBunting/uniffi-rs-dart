@@ -42,7 +42,7 @@ import 'package:ffi/ffi.dart';
 {{ type_helper_code }}
 
 {%- for func in ci.function_definitions() %}
-{%- include "TopLevelFunctionTemplate.dart" %}
+{%- include "TopLevelFunctionTemplate.py" %}
 {%- endfor %}
 
 {% import "macros.dart" as py %}

@@ -87,12 +87,19 @@ impl MapCodeType {
 
 impl CodeType for MapCodeType {
     fn type_label(&self) -> String {
-        "dict".to_string()
+        //"List".to_string()
+        format!(
+            "Map<{},{}>",
+            super::PythonCodeOracle.find(&self.key).canonical_name(),
+            super::PythonCodeOracle.find(&self.value).canonical_name(),
+        )
     }
 
     fn canonical_name(&self) -> String {
         format!(
-            "Map{}{}",
+            "Map{}{}<{},{}>",
+            super::PythonCodeOracle.find(&self.key).canonical_name(),
+            super::PythonCodeOracle.find(&self.value).canonical_name(),
             super::PythonCodeOracle.find(&self.key).canonical_name(),
             super::PythonCodeOracle.find(&self.value).canonical_name(),
         )

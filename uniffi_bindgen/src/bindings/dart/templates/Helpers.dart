@@ -8,11 +8,11 @@ final class _UniffiRustCallStatus extends Struct {
   external _UniffiRustBuffer error_buf;
 }
 
-rustCall(fn) {
-  rustCallWithError(fn);
+_rustCall(fn, pointer) {
+  _rustCallWithError(fn, pointer);
 }
 
-rustCallWithError(fn) {
+_rustCallWithError(fn, pointer) {
   fn();
 }
 

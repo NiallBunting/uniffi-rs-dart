@@ -7,27 +7,27 @@
 {%- macro to_ffi_call(func) -%}
     {%- match func.throws_type() -%}
     {%- when Some with (e) -%}
-_rust_call_with_error({{ e|ffi_converter_name }},
+_rustCallWithError({{ e|ffi_converter_name }},
     {%- else -%}
-_rust_call(
+_rustCall(
     {%- endmatch -%}
-    _UniffiLib.{{ func.ffi_func().name() }},
+    _UniffiLib_{{ func.ffi_func().name() }}_func,
     {%- call arg_list_lowered(func) -%}
-)
+);
 {%- endmacro -%}
 
 {%- macro to_ffi_call_with_prefix(prefix, func) -%}
     {%- match func.throws_type() -%}
     {%- when Some with (e) -%}
-_rust_call_with_error(
+_rustCallWithError(
     {{ e|ffi_converter_name }},
     {%- else -%}
-_rust_call(
+_rustCall(
     {%- endmatch -%}
-    _UniffiLib.{{ func.ffi_func().name() }},
+    _UniffiLib_{{ func.ffi_func().name() }}_func,
     {{- prefix }},
     {%- call arg_list_lowered(func) -%}
-)
+);
 {%- endmacro -%}
 
 {%- macro arg_list_lowered(func) %}
@@ -55,6 +55,14 @@ _rust_call(
 {%- macro arg_list_ffi_decl(func) %}
     {%- for arg in func.arguments() %}
     {{ arg.type_().borrow()|ffi_type_name }},
+    {%- endfor %}
+    {%- if func.has_rust_call_status_arg() %}
+    Pointer<_UniffiRustCallStatus>,{% endif %}
+{% endmacro -%}
+
+{%- macro arg_list_ffi_decl_dart(func) %}
+    {%- for arg in func.arguments() %}
+    {{ arg.type_().borrow()|ffi_type_name_dart }},
     {%- endfor %}
     {%- if func.has_rust_call_status_arg() %}
     Pointer<_UniffiRustCallStatus>,{% endif %}

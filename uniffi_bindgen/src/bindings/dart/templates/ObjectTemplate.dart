@@ -12,7 +12,7 @@ class {{ impl_name }} {
 {%-     when Some with (cons) %}
     {{ impl_name }} ({% call py::arg_list_decl(cons) -%}) {
         {%- call py::setup_args_extra_indent(cons) %}
-        _pointer = {% call py::to_ffi_call(cons) %}
+        _pointer = {% call py::to_ffi_call(cons) %};
     }
 {%-     when None %}
 {%- endmatch %}
@@ -21,7 +21,7 @@ class {{ impl_name }} {
     void dispose() {
         // In case of partial initialization of instances.
         if (_pointer != null) {
-            _rust_call(_UniffiLib.{{ obj.ffi_object_free().name() }}, _pointer)
+            _rustCall(_UniffiLib_{{ obj.ffi_object_free().name() }}_func, _pointer);
         }
     }
 
