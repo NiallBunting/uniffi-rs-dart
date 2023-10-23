@@ -4,9 +4,8 @@ Timestamp = datetime.datetime
 # There is a loss of precision when converting from Rust timestamps,
 # which are accurate to the nanosecond,
 # to Python datetimes, which have a variable precision due to the use of float as representation.
-class _UniffiConverterTimestamp(_UniffiConverterRustBuffer):
-    @staticmethod
-    def read(buf):
+class _UniffiConverterTimestamp(_UniffiConverterRustBuffer) {
+    static read(buf) {
         seconds = buf.read_i64()
         microseconds = buf.read_u32() / 1000
         # Use fromtimestamp(0) then add the seconds using a timedelta.  This
@@ -16,9 +15,9 @@ class _UniffiConverterTimestamp(_UniffiConverterRustBuffer):
             return datetime.datetime.fromtimestamp(0, tz=datetime.timezone.utc) + datetime.timedelta(seconds=seconds, microseconds=microseconds)
         else:
             return datetime.datetime.fromtimestamp(0, tz=datetime.timezone.utc) - datetime.timedelta(seconds=-seconds, microseconds=microseconds)
+    }
 
-    @staticmethod
-    def write(value, buf):
+    static write(value, buf) {
         if value >= datetime.datetime.fromtimestamp(0, datetime.timezone.utc):
             sign = 1
             delta = value - datetime.datetime.fromtimestamp(0, datetime.timezone.utc)
@@ -30,3 +29,5 @@ class _UniffiConverterTimestamp(_UniffiConverterRustBuffer):
         nanoseconds = delta.microseconds * 1000
         buf.write_i64(sign * seconds)
         buf.write_u32(nanoseconds)
+    }
+}

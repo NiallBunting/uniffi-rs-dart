@@ -4,22 +4,23 @@
 # Type alias
 {{ name }} = {{ builtin|type_name }}
 
-class _UniffiConverterType{{ name }}:
-    @staticmethod
-    def write(value, buf):
+class _UniffiConverterType{{ name }} {
+    static write(value, buf) {
         {{ builtin|ffi_converter_name }}.write(value, buf)
+    }
 
-    @staticmethod
-    def read(buf):
+    static read(buf) {
         return {{ builtin|ffi_converter_name }}.read(buf)
+    }
 
-    @staticmethod
-    def lift(value):
+    static lift(value) {
         return {{ builtin|ffi_converter_name }}.lift(value)
+    }
 
-    @staticmethod
-    def lower(value):
+    static lower(value) {
         return {{ builtin|ffi_converter_name }}.lower(value)
+    }
+}
 
 {%- when Some(config) %}
 
@@ -35,24 +36,25 @@ class _UniffiConverterType{{ name }}:
 {{ name }} = {{ builtin|type_name }}
 
 {#- Custom type config supplied, use it to convert the builtin type #}
-class _UniffiConverterType{{ name }}:
-    @staticmethod
-    def write(value, buf):
+class _UniffiConverterType{{ name }} {
+    static write(value, buf) {
         builtin_value = {{ config.from_custom.render("value") }}
         {{ builtin|write_fn }}(builtin_value, buf)
+    }
 
-    @staticmethod
-    def read(buf):
+    static read(buf) {
         builtin_value = {{ builtin|read_fn }}(buf)
         return {{ config.into_custom.render("builtin_value") }}
+    }
 
-    @staticmethod
-    def lift(value):
+    static lift(value) {
         builtin_value = {{ builtin|lift_fn }}(value)
         return {{ config.into_custom.render("builtin_value") }}
+    }
 
-    @staticmethod
-    def lower(value):
+    static lower(value) {
         builtin_value = {{ config.from_custom.render("value") }}
         return {{ builtin|lower_fn }}(builtin_value)
+    }
+}
 {%- endmatch %}

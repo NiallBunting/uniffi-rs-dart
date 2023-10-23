@@ -1,5 +1,5 @@
 {%- let rec = ci|get_record_definition(name) %}
-class {{ type_name }}:
+class {{ type_name }} {
     {% for field in rec.fields() %}
         {{- field.name()|var_name }}: "{{- field|type_name }}";
     {%- endfor %}
@@ -32,8 +32,9 @@ class {{ type_name }}:
             return False
         {%- endfor %}
         return True
+}
 
-class {{ ffi_converter_name }}(_UniffiConverterRustBuffer):
+class {{ ffi_converter_name }}(_UniffiConverterRustBuffer) {
     @staticmethod
     def read(buf):
         return {{ type_name }}(
@@ -47,3 +48,4 @@ class {{ ffi_converter_name }}(_UniffiConverterRustBuffer):
         {%- for field in rec.fields() %}
         {{ field|write_fn }}(value.{{ field.name()|var_name }}, buf)
         {%- endfor %}
+}

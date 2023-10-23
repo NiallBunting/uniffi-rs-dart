@@ -1,4 +1,13 @@
-# UniFFI - a multi-language bindings generator for Rust
+# UniFFI Dart - a multi-language bindings generator for Rust into dart
+
+This adds a binding for UniFFI to dart the language used by flutter.
+
+This is a work in progress and currently does not work.
+
+Please contribute if you wish.
+
+---
+
 
 UniFFI is a toolkit for building cross-platform software components in Rust.
 

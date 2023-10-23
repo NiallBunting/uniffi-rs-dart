@@ -5,9 +5,9 @@
 def {{ callback_handler_class }}(handle, method, args_data, args_len, buf_ptr):
     {% for meth in methods.iter() -%}
     {% let method_name = format!("invoke_{}", meth.name())|fn_name %}
-    def {{ method_name }}(python_callback, args_stream, buf_ptr):
+    {{ method_name }}(python_callback, args_stream, buf_ptr) {
         {#- Unpacking args from the _UniffiRustBuffer #}
-        def makeCall():
+        makeCall() {
             {#- Calling the concrete callback object #}
             {%- if meth.arguments().len() != 0 -%}
             return python_callback.{{ meth.name()|fn_name }}(
@@ -19,8 +19,9 @@ def {{ callback_handler_class }}(handle, method, args_data, args_len, buf_ptr):
             {%- else %}
             return python_callback.{{ meth.name()|fn_name }}()
             {%- endif %}
+        }
 
-        def makeCallAndHandleReturn():
+        makeCallAndHandleReturn() {
             {%- match meth.return_type() %}
             {%- when Some(return_type) %}
             rval = makeCall()
@@ -31,6 +32,7 @@ def {{ callback_handler_class }}(handle, method, args_data, args_len, buf_ptr):
             makeCall()
             {%- endmatch %}
             return _UNIFFI_CALLBACK_SUCCESS
+        }
 
         {%- match meth.throws_type() %}
         {%- when None %}
@@ -46,6 +48,7 @@ def {{ callback_handler_class }}(handle, method, args_data, args_len, buf_ptr):
             return _UNIFFI_CALLBACK_ERROR
         {%- endmatch %}
 
+    }
     {% endfor %}
 
     cb = {{ ffi_converter_name }}._handle_map.get(handle)

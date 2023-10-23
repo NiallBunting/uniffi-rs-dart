@@ -1,6 +1,6 @@
 {%- if func.is_async() %}
 
-def {{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}):
+{{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}) {
     return _uniffi_rust_call_async(
         _UniffiLib.{{ func.ffi_func().name() }}({% call py::arg_list_lowered(func) %}),
         _UniffiLib.{{func.ffi_rust_future_poll(ci) }},
@@ -21,18 +21,23 @@ def {{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}):
         None,
         {%- endmatch %}
     )
+}
 
 {%- else %}
 {%- match func.return_type() -%}
 {%- when Some with (return_type) %}
 
-def {{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}) -> "{{ return_type|type_name }}":
+{{ return_type|type_name }} {{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}) {
     {%- call py::setup_args(func) %}
     return {{ return_type|lift_fn }}({% call py::to_ffi_call(func) %})
+}
+
 {% when None %}
 
-def {{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}):
+{{ func.name()|fn_name }}({%- call py::arg_list_decl(func) -%}) {
     {%- call py::setup_args(func) %}
     {% call py::to_ffi_call(func) %}
+}
+
 {% endmatch %}
 {%- endif %}

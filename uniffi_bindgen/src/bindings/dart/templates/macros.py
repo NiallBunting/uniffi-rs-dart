@@ -44,12 +44,7 @@ _rust_call(
 
 {% macro arg_list_decl(func) %}
     {%- for arg in func.arguments() -%}
-        {{ arg.name()|var_name }}
-        {%- match arg.default_value() %}
-        {%- when Some with(literal) %}: "typing.Union[object, {{ arg|type_name -}}]" = _DEFAULT
-        {%- else %}: "{{ arg|type_name -}}"
-        {%- endmatch %}
-        {%- if !loop.last %},{% endif -%}
+        {%- match arg.default_value() -%} {%- when Some with(literal) -%}: "typing.Union[object, {{ arg|type_name -}}]" = _DEFAULT {%- else -%}{{- arg|type_name }}{%- endmatch %} {{ arg.name()|var_name -}}{%- if !loop.last %},{% endif -%}
     {%- endfor %}
 {%- endmacro %}
 
@@ -100,7 +95,7 @@ _rust_call(
 {%- macro method_decl(py_method_name, meth) %}
 {%  if meth.is_async() %}
 
-    def {{ py_method_name }}(self, {% call arg_list_decl(meth) %}):
+    {{ py_method_name }}({% call arg_list_decl(meth) %}) {
         {%- call setup_args_extra_indent(meth) %}
         return _uniffi_rust_call_async(
             _UniffiLib.{{ meth.ffi_func().name() }}(
@@ -124,23 +119,26 @@ _rust_call(
             None,
             {%- endmatch %}
         )
+    }
 
 {%- else -%}
 {%-     match meth.return_type() %}
 
 {%-         when Some with (return_type) %}
 
-    def {{ py_method_name }}(self, {% call arg_list_decl(meth) %}) -> "{{ return_type|type_name }}":
+    {{ return_type|type_name }} {{ py_method_name }}({% call arg_list_decl(meth) %}) {
         {%- call setup_args_extra_indent(meth) %}
         return {{ return_type|lift_fn }}(
             {% call to_ffi_call_with_prefix("self._pointer", meth) %}
         )
+    }
 
 {%-         when None %}
 
-    def {{ py_method_name }}(self, {% call arg_list_decl(meth) %}):
+    {{ py_method_name }}({% call arg_list_decl(meth) %}){
         {%- call setup_args_extra_indent(meth) %}
         {% call to_ffi_call_with_prefix("self._pointer", meth) %}
+    }
 {%      endmatch %}
 {%  endif %}
 

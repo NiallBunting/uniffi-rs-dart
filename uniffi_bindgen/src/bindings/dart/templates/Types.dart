@@ -68,7 +68,7 @@
 {%- include "RecordTemplate.py" %}
 
 {%- when Type::Object { name, module_path, imp } %}
-{%- include "ObjectTemplate.py" %}
+{%- include "ObjectTemplate.dart" %}
 
 {%- when Type::Timestamp %}
 {%- include "TimestampHelper.py" %}

@@ -57,7 +57,7 @@ DynamicLibrary _uniffiLoadDynamicLibrary() {
   return DynamicLibrary.open("libmatrix_sdk_ffi.so");
 }
 
-late final dylib = _uniffiLoadDynamicLibrary();
+late final _uniffiLib = _uniffiLoadDynamicLibrary();
 //
 //def _uniffi_check_contract_api_version(lib):
 //    # Get the bindings contract version from our ComponentInterface

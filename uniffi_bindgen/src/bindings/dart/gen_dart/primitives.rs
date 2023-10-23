@@ -56,7 +56,7 @@ macro_rules! impl_code_type_for_primitive {
 }
 
 impl_code_type_for_primitive!(BooleanCodeType, "bool", "Bool");
-impl_code_type_for_primitive!(StringCodeType, "str", "String");
+impl_code_type_for_primitive!(StringCodeType, "String", "String");
 impl_code_type_for_primitive!(BytesCodeType, "bytes", "Bytes");
 impl_code_type_for_primitive!(Int8CodeType, "int", "Int8");
 impl_code_type_for_primitive!(Int16CodeType, "int", "Int16");
@@ -66,5 +66,5 @@ impl_code_type_for_primitive!(UInt8CodeType, "int", "UInt8");
 impl_code_type_for_primitive!(UInt16CodeType, "int", "UInt16");
 impl_code_type_for_primitive!(UInt32CodeType, "int", "UInt32");
 impl_code_type_for_primitive!(UInt64CodeType, "int", "UInt64");
-impl_code_type_for_primitive!(Float32CodeType, "float", "Float");
-impl_code_type_for_primitive!(Float64CodeType, "float", "Double");
+impl_code_type_for_primitive!(Float32CodeType, "double", "Float");
+impl_code_type_for_primitive!(Float64CodeType, "double", "Double");

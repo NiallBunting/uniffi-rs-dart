@@ -8,7 +8,7 @@ _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS = 0
 _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_CANCELED = 1
 _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_ERROR = 2
 
-class {{ ffi_converter_name }}:
+class {{ ffi_converter_name }} {
     _pointer_manager = _UniffiPointerManager()
 
     @classmethod
@@ -28,9 +28,10 @@ class {{ ffi_converter_name }}:
     @classmethod
     def lift(cls, value):
         return cls._pointer_manager.lookup(value)
+}
 
 @_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T
-def _uniffi_executor_callback(eventloop_address, delay, task_ptr, task_data):
+def _uniffi_executor_callback(eventloop_address, delay, task_ptr, task_data){
     if task_ptr is None:
         {{ ffi_converter_name }}._pointer_manager.release_pointer(eventloop_address)
         return _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS
@@ -53,6 +54,7 @@ def _uniffi_executor_callback(eventloop_address, delay, task_ptr, task_data):
             eventloop.call_soon_threadsafe(eventloop.call_later, delay / 1000.0, callback,
                                            task_data, _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS)
         return _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS
+}
 
 # Register the callback with the scaffolding
 {%- match ci.ffi_foreign_executor_callback_set() %}

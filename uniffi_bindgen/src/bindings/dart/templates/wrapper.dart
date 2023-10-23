@@ -33,4 +33,15 @@ import 'package:ffi/ffi.dart';
 // Contains loading, initialization code, and the FFI Function declarations.
 {% include "NamespaceLibraryTemplate.dart" %}
 
+{%- if ci.has_async_fns() %}
+{%- include "Async.py" %}
+{%- endif %}
+
+# Public interface members begin here.
+{{ type_helper_code }}
+
+{%- for func in ci.function_definitions() %}
+{%- include "TopLevelFunctionTemplate.py" %}
+{%- endfor %}
+
 {% import "macros.py" as py %}

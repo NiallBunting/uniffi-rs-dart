@@ -1,5 +1,5 @@
 # Types conforming to `_UniffiConverterPrimitive` pass themselves directly over the FFI.
-class _UniffiConverterPrimitive:
+class _UniffiConverterPrimitive {
     @classmethod
     def check(cls, value):
         return value
@@ -19,8 +19,9 @@ class _UniffiConverterPrimitive:
     @classmethod
     def write(cls, value, buf):
         cls.write_unchecked(cls.check(value), buf)
+}
 
-class _UniffiConverterPrimitiveInt(_UniffiConverterPrimitive):
+class _UniffiConverterPrimitiveInt(_UniffiConverterPrimitive) {
     @classmethod
     def check(cls, value):
         try:
@@ -32,8 +33,9 @@ class _UniffiConverterPrimitiveInt(_UniffiConverterPrimitive):
         if not cls.VALUE_MIN <= value < cls.VALUE_MAX:
             raise ValueError("{} requires {} <= value < {}".format(cls.CLASS_NAME, cls.VALUE_MIN, cls.VALUE_MAX))
         return super().check(value)
+}
 
-class _UniffiConverterPrimitiveFloat(_UniffiConverterPrimitive):
+class _UniffiConverterPrimitiveFloat(_UniffiConverterPrimitive) {
     @classmethod
     def check(cls, value):
         try:
@@ -43,10 +45,11 @@ class _UniffiConverterPrimitiveFloat(_UniffiConverterPrimitive):
         if not isinstance(value, float):
             raise TypeError("__float__ returned non-float (type {})".format(type(value).__name__))
         return super().check(value)
+}
 
 # Helper class for wrapper types that will always go through a _UniffiRustBuffer.
 # Classes should inherit from this and implement the `read` and `write` static methods.
-class _UniffiConverterRustBuffer:
+class _UniffiConverterRustBuffer {
     @classmethod
     def lift(cls, rbuf):
         with rbuf.consume_with_stream() as stream:
@@ -57,3 +60,4 @@ class _UniffiConverterRustBuffer:
         with _UniffiRustBuffer.alloc_with_builder() as builder:
             cls.write(value, builder)
             return builder.finalize()
+}
