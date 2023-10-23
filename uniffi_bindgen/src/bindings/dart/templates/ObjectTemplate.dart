@@ -2,7 +2,7 @@
 {%- let (protocol_name, impl_name) = obj|object_names %}
 {%- let methods = obj.methods() %}
 
-{% include "Protocol.py" %}
+{% include "Protocol.dart" %}
 
 class {{ impl_name }} {
     late Pointer? _pointer;
@@ -29,7 +29,7 @@ class {{ impl_name }} {
     @classmethod
     {{ cons.name()|fn_name }}(cls, {% call py::arg_list_decl(cons) %}) {
         {%- call py::setup_args_extra_indent(cons) %}
-        # Call the (fallible) function before creating any half-baked object instances.
+        // Call the (fallible) function before creating any half-baked object instances.
         pointer = {% call py::to_ffi_call(cons) %}
         return cls._make_instance_(pointer)
      }
@@ -69,7 +69,7 @@ class {{ impl_name }} {
 {%- let callback_handler_class = format!("UniffiCallbackInterface{}", name) %}
 {%- let callback_handler_obj = format!("uniffiCallbackInterface{}", name) %}
 {%- let ffi_init_callback = obj.ffi_init_callback() %}
-{% include "CallbackInterfaceImpl.py" %}
+{% include "CallbackInterfaceImpl.dart" %}
 {%- endif %}
 }
 

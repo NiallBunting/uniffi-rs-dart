@@ -6,14 +6,14 @@
         _UniffiLib.{{func.ffi_rust_future_poll(ci) }},
         _UniffiLib.{{func.ffi_rust_future_complete(ci) }},
         _UniffiLib.{{func.ffi_rust_future_free(ci) }},
-        # lift function
+        // lift function
         {%- match func.return_type() %}
         {%- when Some(return_type) %}
         {{ return_type|lift_fn }},
         {%- when None %}
         lambda val: None,
         {% endmatch %}
-        # Error FFI converter
+        // Error FFI converter
         {%- match func.throws_type() %}
         {%- when Some(e) %}
         {{ e|ffi_converter_name }},

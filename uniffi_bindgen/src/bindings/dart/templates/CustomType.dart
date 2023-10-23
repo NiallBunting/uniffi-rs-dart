@@ -1,7 +1,7 @@
 {%- match python_config.custom_types.get(name.as_str())  %}
 {% when None %}
 {#- No custom type config, just forward all methods to our builtin type #}
-# Type alias
+// Type alias
 {{ name }} = {{ builtin|type_name }}
 
 class _UniffiConverterType{{ name }} {
@@ -32,7 +32,7 @@ class _UniffiConverterType{{ name }} {
 {%- else %}
 {%- endmatch %}
 
-# Type alias
+// Type alias
 {{ name }} = {{ builtin|type_name }}
 
 {#- Custom type config supplied, use it to convert the builtin type #}

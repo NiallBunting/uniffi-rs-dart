@@ -8,7 +8,7 @@ class {{ type_name }}(Exception) {}
 
 _UniffiTemp{{ type_name }} = {{ type_name }}
 
-class {{ type_name }} {  # type: ignore
+class {{ type_name }} {  
     {%- for variant in e.variants() -%}
     {%- let variant_type_name = variant.name()|class_name -%}
     {%- if e.is_flat() %}
@@ -36,11 +36,11 @@ class {{ type_name }} {  # type: ignore
         }
     }
     {%- endif %}
-    _UniffiTemp{{ type_name }}.{{ variant_type_name }} = {{ variant_type_name }} # type: ignore
+    _UniffiTemp{{ type_name }}.{{ variant_type_name }} = {{ variant_type_name }} 
     {%- endfor %}
 }
 
-{{ type_name }} = _UniffiTemp{{ type_name }} # type: ignore
+{{ type_name }} = _UniffiTemp{{ type_name }} 
 del _UniffiTemp{{ type_name }}
 
 

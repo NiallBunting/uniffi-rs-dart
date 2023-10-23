@@ -6,8 +6,8 @@ class ConcurrentHandleMap {
     """
 
     ConcurrentHandleMap(self) {
-        # type Handle = int
-        self._left_map = {}  # type: Dict[Handle, Any]
+        // type Handle = int
+        self._left_map = {}  // type: Dict[Handle, Any]
 
         self._lock = threading.Lock()
         self._current_handle = 0
@@ -38,10 +38,10 @@ class ConcurrentHandleMap {
     }
 }
 
-# Magic number for the Rust proxy to call using the same mechanism as every other method,
-# to free the callback once it's dropped by Rust.
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
 IDX_CALLBACK_FREE = 0
-# Return codes for callback calls
+// Return codes for callback calls
 _UNIFFI_CALLBACK_SUCCESS = 0
 _UNIFFI_CALLBACK_ERROR = 1
 _UNIFFI_CALLBACK_UNEXPECTED_ERROR = 2

@@ -16,10 +16,10 @@ class {{ ffi_converter_name }}(_UniffiConverterRustBuffer) {
         if count < 0:
             raise InternalError("Unexpected negative map size")
 
-        # It would be nice to use a dict comprehension,
-        # but in Python 3.7 and before the evaluation order is not according to spec,
-        # so we we're reading the value before the key.
-        # This loop makes the order explicit: first reading the key, then the value.
+        // It would be nice to use a dict comprehension,
+        // but in Python 3.7 and before the evaluation order is not according to spec,
+        // so we we're reading the value before the key.
+        // This loop makes the order explicit: first reading the key, then the value.
         d = {}
         for i in range(count):
             key = {{ key_ffi_converter }}.read(buf)

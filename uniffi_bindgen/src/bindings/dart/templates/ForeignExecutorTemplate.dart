@@ -1,4 +1,4 @@
-# FFI code for the ForeignExecutor type
+// FFI code for the ForeignExecutor type
 
 {{ self.add_import("asyncio") }}
 
@@ -41,22 +41,22 @@ def _uniffi_executor_callback(eventloop_address, delay, task_ptr, task_data){
             return _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_CANCELED
 
         callback = _UNIFFI_RUST_TASK(task_ptr)
-        # FIXME: there's no easy way to get a callback when an eventloop is closed.  This means that
-        # if eventloop is called before the `call_soon_threadsafe()` calls are invoked, the call
-        # will never happen and we will probably leak a resource.
+        // FIXME: there's no easy way to get a callback when an eventloop is closed.  This means that
+        // if eventloop is called before the `call_soon_threadsafe()` calls are invoked, the call
+        // will never happen and we will probably leak a resource.
         if delay == 0:
-            # This can be called from any thread, so make sure to use `call_soon_threadsafe'
+            // This can be called from any thread, so make sure to use `call_soon_threadsafe'
             eventloop.call_soon_threadsafe(callback, task_data,
                                            _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS)
         else:
-            # For delayed tasks, we use `call_soon_threadsafe()` + `call_later()` to make the
-            # operation threadsafe
+            // For delayed tasks, we use `call_soon_threadsafe()` + `call_later()` to make the
+            // operation threadsafe
             eventloop.call_soon_threadsafe(eventloop.call_later, delay / 1000.0, callback,
                                            task_data, _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS)
         return _UNIFFI_FOREIGN_EXECUTOR_CALLBACK_SUCCESS
 }
 
-# Register the callback with the scaffolding
+// Register the callback with the scaffolding
 {%- match ci.ffi_foreign_executor_callback_set() %}
 {%- when Some with (fn) %}
 _UniffiLib.{{ fn.name() }}(_uniffi_executor_callback)

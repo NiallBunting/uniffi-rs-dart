@@ -1,4 +1,4 @@
-# Types conforming to `_UniffiConverterPrimitive` pass themselves directly over the FFI.
+// Types conforming to `_UniffiConverterPrimitive` pass themselves directly over the FFI.
 class _UniffiConverterPrimitive {
     @classmethod
     def check(cls, value):
@@ -47,8 +47,8 @@ class _UniffiConverterPrimitiveFloat(_UniffiConverterPrimitive) {
         return super().check(value)
 }
 
-# Helper class for wrapper types that will always go through a _UniffiRustBuffer.
-# Classes should inherit from this and implement the `read` and `write` static methods.
+// Helper class for wrapper types that will always go through a _UniffiRustBuffer.
+// Classes should inherit from this and implement the `read` and `write` static methods.
 class _UniffiConverterRustBuffer {
     @classmethod
     def lift(cls, rbuf):

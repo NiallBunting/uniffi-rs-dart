@@ -1,4 +1,4 @@
-{%- import "macros.py" as py %}
+{%- import "macros.dart" as py %}
 
 {%- for type_ in ci.iter_types() %}
 {%- let type_name = type_|type_name %}
@@ -17,85 +17,85 @@
 {%- match type_ %}
 
 {%- when Type::Boolean %}
-{%- include "BooleanHelper.py" %}
+{%- include "BooleanHelper.dart" %}
 
 {%- when Type::Int8 %}
-{%- include "Int8Helper.py" %}
+{%- include "Int8Helper.dart" %}
 
 {%- when Type::Int16 %}
-{%- include "Int16Helper.py" %}
+{%- include "Int16Helper.dart" %}
 
 {%- when Type::Int32 %}
-{%- include "Int32Helper.py" %}
+{%- include "Int32Helper.dart" %}
 
 {%- when Type::Int64 %}
-{%- include "Int64Helper.py" %}
+{%- include "Int64Helper.dart" %}
 
 {%- when Type::UInt8 %}
-{%- include "UInt8Helper.py" %}
+{%- include "UInt8Helper.dart" %}
 
 {%- when Type::UInt16 %}
-{%- include "UInt16Helper.py" %}
+{%- include "UInt16Helper.dart" %}
 
 {%- when Type::UInt32 %}
-{%- include "UInt32Helper.py" %}
+{%- include "UInt32Helper.dart" %}
 
 {%- when Type::UInt64 %}
-{%- include "UInt64Helper.py" %}
+{%- include "UInt64Helper.dart" %}
 
 {%- when Type::Float32 %}
-{%- include "Float32Helper.py" %}
+{%- include "Float32Helper.dart" %}
 
 {%- when Type::Float64 %}
-{%- include "Float64Helper.py" %}
+{%- include "Float64Helper.dart" %}
 
 {%- when Type::String %}
-{%- include "StringHelper.py" %}
+{%- include "StringHelper.dart" %}
 
 {%- when Type::Bytes %}
-{%- include "BytesHelper.py" %}
+{%- include "BytesHelper.dart" %}
 
 {%- when Type::Enum { name, module_path } %}
 {%- let e = ci.get_enum_definition(name).unwrap() %}
 {# For enums, there are either an error *or* an enum, they can't be both. #}
 {%- if ci.is_name_used_as_error(name) %}
-{%- include "ErrorTemplate.py" %}
+{%- include "ErrorTemplate.dart" %}
 {%- else %}
-{%- include "EnumTemplate.py" %}
+{%- include "EnumTemplate.dart" %}
 {% endif %}
 
 {%- when Type::Record { name, module_path } %}
-{%- include "RecordTemplate.py" %}
+{%- include "RecordTemplate.dart" %}
 
 {%- when Type::Object { name, module_path, imp } %}
 {%- include "ObjectTemplate.dart" %}
 
 {%- when Type::Timestamp %}
-{%- include "TimestampHelper.py" %}
+{%- include "TimestampHelper.dart" %}
 
 {%- when Type::Duration %}
-{%- include "DurationHelper.py" %}
+{%- include "DurationHelper.dart" %}
 
 {%- when Type::Optional { inner_type } %}
-{%- include "OptionalTemplate.py" %}
+{%- include "OptionalTemplate.dart" %}
 
 {%- when Type::Sequence { inner_type } %}
-{%- include "SequenceTemplate.py" %}
+{%- include "SequenceTemplate.dart" %}
 
 {%- when Type::Map { key_type, value_type } %}
-{%- include "MapTemplate.py" %}
+{%- include "MapTemplate.dart" %}
 
 {%- when Type::CallbackInterface { name, module_path } %}
-{%- include "CallbackInterfaceTemplate.py" %}
+{%- include "CallbackInterfaceTemplate.dart" %}
 
 {%- when Type::Custom { name, module_path, builtin } %}
-{%- include "CustomType.py" %}
+{%- include "CustomType.dart" %}
 
 {%- when Type::External { name, module_path, namespace, kind, tagged } %}
-{%- include "ExternalTemplate.py" %}
+{%- include "ExternalTemplate.dart" %}
 
 {%- when Type::ForeignExecutor %}
-{%- include "ForeignExecutorTemplate.py" %}
+{%- include "ForeignExecutorTemplate.dart" %}
 
 {%- else %}
 {%- endmatch %}

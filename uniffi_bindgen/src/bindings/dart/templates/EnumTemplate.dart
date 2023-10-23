@@ -60,7 +60,7 @@ class {{ type_name }} {
 // enum class, so that method calls and instance checks etc will work intuitively.
 // We might be able to do this a little more neatly with a metaclass, but this'll do.
 {% for variant in e.variants() -%}
-{{ type_name }}.{{ variant.name()|enum_variant_py }} = type("{{ type_name }}.{{ variant.name()|enum_variant_py }}", ({{ type_name }}.{{variant.name()|enum_variant_py}}, {{ type_name }},), {})  # type: ignore
+{{ type_name }}.{{ variant.name()|enum_variant_py }} = type("{{ type_name }}.{{ variant.name()|enum_variant_py }}", ({{ type_name }}.{{variant.name()|enum_variant_py}}, {{ type_name }},), {})  // type: ignore
 {% endfor %}
 
 {% endif %}

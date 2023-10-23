@@ -34,14 +34,14 @@ import 'package:ffi/ffi.dart';
 {% include "NamespaceLibraryTemplate.dart" %}
 
 {%- if ci.has_async_fns() %}
-{%- include "Async.py" %}
+{%- include "Async.dart" %}
 {%- endif %}
 
-# Public interface members begin here.
+// Public interface members begin here.
 {{ type_helper_code }}
 
 {%- for func in ci.function_definitions() %}
-{%- include "TopLevelFunctionTemplate.py" %}
+{%- include "TopLevelFunctionTemplate.dart" %}
 {%- endfor %}
 
 {% import "macros.py" as py %}

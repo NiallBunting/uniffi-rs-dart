@@ -15,10 +15,10 @@ class _UniffiPointerManagerCPython:
         This returns a ctypes.c_size_t.  This is always the same size as a pointer and can be
         interchanged with pointers for FFI function arguments and return values.
         """
-        # IncRef the object since we're going to pass a pointer to Rust
+        // IncRef the object since we're going to pass a pointer to Rust
         ctypes.pythonapi.Py_IncRef(ctypes.py_object(obj))
-        # id() is the object address on CPython
-        # (https://docs.python.org/3/library/functions.html#id)
+        // id() is the object address on CPython
+        // (https://docs.python.org/3/library/functions.html#id)
         return id(obj)
 
     def release_pointer(self, address):
@@ -61,8 +61,8 @@ class _UniffiPointerManagerGeneral:
         with self._lock:
             return self._map[handle]
 
-# Pick an pointer manager implementation based on the platform
+// Pick an pointer manager implementation based on the platform
 if platform.python_implementation() == 'CPython':
-    _UniffiPointerManager = _UniffiPointerManagerCPython # type: ignore
+    _UniffiPointerManager = _UniffiPointerManagerCPython 
 else:
-    _UniffiPointerManager = _UniffiPointerManagerGeneral # type: ignore
+    _UniffiPointerManager = _UniffiPointerManagerGeneral 

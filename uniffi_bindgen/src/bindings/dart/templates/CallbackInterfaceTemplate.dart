@@ -5,8 +5,8 @@
 {%- let protocol_name = type_name.clone() %}
 {%- let methods = cbi.methods() %}
 
-{% include "Protocol.py" %}
-{% include "CallbackInterfaceImpl.py" %}
+{% include "Protocol.dart" %}
+{% include "CallbackInterfaceImpl.dart" %}
 
-# The _UniffiConverter which transforms the Callbacks in to Handles to pass to Rust.
+// The _UniffiConverter which transforms the Callbacks in to Handles to pass to Rust.
 {{ ffi_converter_name }} = UniffiCallbackInterfaceFfiConverter()
