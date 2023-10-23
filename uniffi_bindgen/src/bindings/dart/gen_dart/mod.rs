@@ -301,29 +301,29 @@ impl PythonCodeOracle {
 
     fn ffi_type_label(ffi_type: &FfiType) -> String {
         match ffi_type {
-            FfiType::Int8 => "ctypes.c_int8".to_string(),
-            FfiType::UInt8 => "ctypes.c_uint8".to_string(),
-            FfiType::Int16 => "ctypes.c_int16".to_string(),
-            FfiType::UInt16 => "ctypes.c_uint16".to_string(),
-            FfiType::Int32 => "ctypes.c_int32".to_string(),
-            FfiType::UInt32 => "ctypes.c_uint32".to_string(),
-            FfiType::Int64 => "ctypes.c_int64".to_string(),
-            FfiType::UInt64 => "ctypes.c_uint64".to_string(),
-            FfiType::Float32 => "ctypes.c_float".to_string(),
-            FfiType::Float64 => "ctypes.c_double".to_string(),
-            FfiType::RustArcPtr(_) => "ctypes.c_void_p".to_string(),
+            FfiType::Int8 => "Int8".to_string(),
+            FfiType::UInt8 => "Uint8".to_string(),
+            FfiType::Int16 => "Int16".to_string(),
+            FfiType::UInt16 => "Uint16".to_string(),
+            FfiType::Int32 => "Int32".to_string(),
+            FfiType::UInt32 => "Uint32".to_string(),
+            FfiType::Int64 => "Int64".to_string(),
+            FfiType::UInt64 => "Uint64".to_string(),
+            FfiType::Float32 => "Float".to_string(),
+            FfiType::Float64 => "Double".to_string(),
+            FfiType::RustArcPtr(_) => "Pointer".to_string(),
             FfiType::RustBuffer(maybe_suffix) => match maybe_suffix {
                 Some(suffix) => format!("_UniffiRustBuffer{suffix}"),
                 None => "_UniffiRustBuffer".to_string(),
             },
-            FfiType::ForeignBytes => "_UniffiForeignBytes".to_string(),
-            FfiType::ForeignCallback => "_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+            FfiType::ForeignBytes => "Void".to_string(),//_UniffiForeignBytes".to_string(),
+            FfiType::ForeignCallback => "Void".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
             // Pointer to an `asyncio.EventLoop` instance
-            FfiType::ForeignExecutorHandle => "ctypes.c_size_t".to_string(),
-            FfiType::ForeignExecutorCallback => "_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
-            FfiType::RustFutureHandle => "ctypes.c_void_p".to_string(),
-            FfiType::RustFutureContinuationCallback => "_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
-            FfiType::RustFutureContinuationData => "ctypes.c_size_t".to_string(),
+            FfiType::ForeignExecutorHandle => "Size".to_string(),
+            FfiType::ForeignExecutorCallback => "Void".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
+            FfiType::RustFutureHandle => "Pointer".to_string(),
+            FfiType::RustFutureContinuationCallback => "Void".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+            FfiType::RustFutureContinuationData => "Size".to_string(),
         }
     }
 

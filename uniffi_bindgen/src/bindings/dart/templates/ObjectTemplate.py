@@ -5,7 +5,7 @@
 {% include "Protocol.py" %}
 
 class {{ impl_name }}:
-    _pointer: ctypes.c_void_p
+    _pointer: Void
 
 {%- match obj.primary_constructor() %}
 {%-     when Some with (cons) %}

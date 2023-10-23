@@ -62,7 +62,7 @@ _rust_call(
     {{ arg.type_().borrow()|ffi_type_name }},
     {%- endfor %}
     {%- if func.has_rust_call_status_arg() %}
-    ctypes.POINTER(_UniffiRustCallStatus),{% endif %}
+    Pointer<_UniffiRustCallStatus>,{% endif %}
 {% endmacro -%}
 
 {#
