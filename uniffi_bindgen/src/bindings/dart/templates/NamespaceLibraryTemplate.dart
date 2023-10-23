@@ -83,9 +83,6 @@ late final dylib = _uniffiLoadDynamicLibrary();
 typedef _UniffiLib_{{ func.name() }}_c = {% match func.return_type() %}{% when Some with (type_) %}{{ type_|ffi_type_name }}{% when None %}Void{% endmatch %} Function({%- call py::arg_list_ffi_decl(func) -%});
 {%- endfor %}
 
-
-
-
 //{# Ensure to call the contract verification only after we defined all functions. -#}
 //_uniffi_check_contract_api_version(_UniffiLib)
 //_uniffi_check_api_checksums(_UniffiLib)
