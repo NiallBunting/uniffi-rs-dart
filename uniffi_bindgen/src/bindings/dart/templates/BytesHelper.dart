@@ -1,4 +1,15 @@
 class _UniffiConverterBytes extends _UniffiConverterRustBuffer {
+
+
+    static lift(val) {
+      return  val;
+    }
+
+    static lower(val) {
+      return  val;
+    }
+
+
     static read(buf) {
         /*size = buf.read_i32()
         if size < 0:

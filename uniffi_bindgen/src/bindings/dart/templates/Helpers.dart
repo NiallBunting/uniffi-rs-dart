@@ -8,12 +8,17 @@ final class _UniffiRustCallStatus extends Struct {
   external _UniffiRustBuffer error_buf;
 }
 
-_rustCall(fn, pointer) {
-  _rustCallWithError(fn, pointer);
+// This is just a wrapper
+_rustCall(fn, rustCallStatus) {
+  return _rustCallWithError(null, fn, rustCallStatus);
 }
 
-_rustCallWithError(fn, pointer) {
-  fn();
+// This is just a wrapper
+_rustCallWithError(_UniffiConverterRustBuffer? error, fn, Pointer<_UniffiRustCallStatus> rustCallStatus) {
+  var a = fn();
+
+  calloc.free(rustCallStatus);
+  return a;
 }
 
 //class InternalError(Exception):

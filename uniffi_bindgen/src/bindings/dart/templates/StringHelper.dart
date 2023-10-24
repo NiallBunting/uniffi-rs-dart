@@ -20,9 +20,8 @@ class _UniffiConverterString {
         buf.write(utf8_bytes)*/
     }
 
-    static lift(buf) {
-        /*with buf.consume_with_stream() as stream:
-            return stream.read(stream.remaining()).decode("utf-8")*/
+    static String lift(_UniffiRustBuffer buf) {
+      return buf.data.toDartString();
     }
 
     static lower(value) {

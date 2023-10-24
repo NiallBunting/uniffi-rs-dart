@@ -25,7 +25,7 @@ impl CodeType for OptionalCodeType {
 
     fn canonical_name(&self) -> String {
         format!(
-            "{}?",
+            "Optional{}",
             super::PythonCodeOracle.find(&self.inner).canonical_name(),
         )
     }
@@ -90,16 +90,14 @@ impl CodeType for MapCodeType {
         //"List".to_string()
         format!(
             "Map<{},{}>",
-            super::PythonCodeOracle.find(&self.key).canonical_name(),
-            super::PythonCodeOracle.find(&self.value).canonical_name(),
+            super::PythonCodeOracle.find(&self.key).type_label(),
+            super::PythonCodeOracle.find(&self.value).type_label(),
         )
     }
 
     fn canonical_name(&self) -> String {
         format!(
-            "Map{}{}<{},{}>",
-            super::PythonCodeOracle.find(&self.key).canonical_name(),
-            super::PythonCodeOracle.find(&self.value).canonical_name(),
+            "Map{}{}",
             super::PythonCodeOracle.find(&self.key).canonical_name(),
             super::PythonCodeOracle.find(&self.value).canonical_name(),
         )

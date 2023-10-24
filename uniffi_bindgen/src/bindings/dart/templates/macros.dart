@@ -4,37 +4,36 @@
 // passed to rust via `arg_list_lowered`
 #}
 
-{%- macro to_ffi_call(func) -%}
+{%- macro to_ffi_call(func, rustStatus) -%}
     {%- match func.throws_type() -%}
     {%- when Some with (e) -%}
-_rustCallWithError({{ e|ffi_converter_name }},
+_rustCallWithError({{ e|ffi_converter_name }}(),
     {%- else -%}
 _rustCall(
     {%- endmatch -%}
-    _UniffiLib_{{ func.ffi_func().name() }}_func,
-    {%- call arg_list_lowered(func) -%}
-);
+    () => _UniffiLib_{{ func.ffi_func().name() }}_func({%- call arg_list_lowered(func, rustStatus) -%}),
+    {{ rustStatus }}
+)
 {%- endmacro -%}
 
-{%- macro to_ffi_call_with_prefix(prefix, func) -%}
+{%- macro to_ffi_call_with_prefix(prefix, func, rustStatus) -%}
     {%- match func.throws_type() -%}
     {%- when Some with (e) -%}
 _rustCallWithError(
-    {{ e|ffi_converter_name }},
+    {{ e|ffi_converter_name }}(),
     {%- else -%}
 _rustCall(
     {%- endmatch -%}
-    _UniffiLib_{{ func.ffi_func().name() }}_func,
-    {{- prefix }},
-    {%- call arg_list_lowered(func) -%}
-);
+    () => _UniffiLib_{{ func.ffi_func().name() }}_func({{- prefix }}, {%- call arg_list_lowered(func, rustStatus) -%}),
+    {{ rustStatus }}
+)
 {%- endmacro -%}
 
-{%- macro arg_list_lowered(func) %}
+{%- macro arg_list_lowered(func, rustStatus) %}
     {%- for arg in func.arguments() %}
-        {{ arg|lower_fn }}({{ arg.name()|var_name }})
-        {%- if !loop.last %},{% endif %}
+        {{ arg|lower_fn }}({{ arg.name()|var_name }}),
     {%- endfor %}
+    {{ rustStatus }}
 {%- endmacro -%}
 
 {#-
@@ -83,18 +82,10 @@ _rustCall(
 {%- endmacro -%}
 
 {#
- # Exactly the same thing as `setup_args()` but with an extra 4 spaces of
- # indent so that it works with object methods.
+ # Create a rustCallback
  #}
-{%- macro setup_args_extra_indent(func) %}
-        {%- for arg in func.arguments() %}
-        {%- match arg.default_value() %}
-        {%- when None %}
-        {%- when Some with(literal) %}
-        if {{ arg.name()|var_name }} is _DEFAULT:
-            {{ arg.name()|var_name }} = {{ literal|literal_py(arg.as_type().borrow()) }}
-        {%- endmatch %}
-        {% endfor -%}
+{%- macro create_rust_callback() %}
+final Pointer<_UniffiRustCallStatus> _rustCallStatus = calloc<_UniffiRustCallStatus >();
 {%- endmacro -%}
 
 {#
@@ -104,10 +95,11 @@ _rustCall(
 {%  if meth.is_async() %}
 
     {{ py_method_name }}({% call arg_list_decl(meth) %}) {
-        {%- call setup_args_extra_indent(meth) %}
+        {%- call setup_args(meth) %}
+        /*{%- call create_rust_callback() %}
         return _uniffi_rust_call_async(
             _UniffiLib.{{ meth.ffi_func().name() }}(
-                self._pointer, {% call arg_list_lowered(meth) %}
+                self._pointer, {% call arg_list_lowered(meth, "_rustCallStatus") %}
             ),
             _UniffiLib.{{ meth.ffi_rust_future_poll(ci) }},
             _UniffiLib.{{ meth.ffi_rust_future_complete(ci) }},
@@ -126,7 +118,7 @@ _rustCall(
             {%- when None %}
             None,
             {%- endmatch %}
-        )
+        );*/
     }
 
 {%- else -%}
@@ -134,18 +126,24 @@ _rustCall(
 
 {%-         when Some with (return_type) %}
 
+    // method: 2
     {{ return_type|type_name }} {{ py_method_name }}({% call arg_list_decl(meth) %}) {
-        {%- call setup_args_extra_indent(meth) %}
+        {%- call setup_args(meth) %}
+
+        {%- call create_rust_callback() %}
         return {{ return_type|lift_fn }}(
-            {% call to_ffi_call_with_prefix("self._pointer", meth) %}
-        )
+            {% call to_ffi_call_with_prefix("_pointer", meth, "_rustCallStatus") %}
+        );
     }
 
 {%-         when None %}
 
+    // method: 3
     {{ py_method_name }}({% call arg_list_decl(meth) %}){
-        {%- call setup_args_extra_indent(meth) %}
-        {% call to_ffi_call_with_prefix("self._pointer", meth) %}
+        {%- call setup_args(meth) %}
+
+        {%- call create_rust_callback() %}
+        {% call to_ffi_call_with_prefix("_pointer", meth, "_rustCallStatus") %};
     }
 {%      endmatch %}
 {%  endif %}

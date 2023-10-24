@@ -54,7 +54,13 @@
 
 DynamicLibrary _uniffiLoadDynamicLibrary() {
 
-  return DynamicLibrary.open("libmatrix_sdk_ffi.so");
+  final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "./lib{{ config.cdylib_name() }}.so";
+  return Platform.isIOS
+      ? DynamicLibrary.process()
+      : Platform.isMacOS
+          ? DynamicLibrary.executable()
+          : DynamicLibrary.open(path);
+
 }
 
 late final _uniffiLib = _uniffiLoadDynamicLibrary();
@@ -78,13 +84,14 @@ late final _uniffiLib = _uniffiLoadDynamicLibrary();
 //# A ctypes library to expose the extern-C FFI definitions.
 //# This is an implementation detail which will be called internally by the public API.
 //
-//_UniffiLib = _uniffi_load_indirect()
 {%- for func in ci.iter_ffi_function_definitions() %}
+
 typedef _UniffiLib_{{ func.name() }}_c = {% match func.return_type() %}{% when Some with (type_) %}{{ type_|ffi_type_name }}{% when None %}Void{% endmatch %} Function({%- call py::arg_list_ffi_decl(func) -%});
 
 typedef _UniffiLib_{{ func.name() }}_d = {% match func.return_type() %}{% when Some with (type_) %}{{ type_|ffi_type_name_dart }}{% when None %}void{% endmatch %} Function({%- call py::arg_list_ffi_decl_dart(func) -%});
 
 final _UniffiLib_{{ func.name() }}_d _UniffiLib_{{ func.name() }}_func = _uniffiLib.lookup<NativeFunction<_UniffiLib_{{ func.name() }}_c>>('{{ func.name() }}').asFunction();
+
 {%- endfor %}
 
 //{# Ensure to call the contract verification only after we defined all functions. -#}

@@ -9,4 +9,18 @@
 {% include "CallbackInterfaceImpl.dart" %}
 
 // The _UniffiConverter which transforms the Callbacks in to Handles to pass to Rust.
-//late {{ ffi_converter_name }} = UniffiCallbackInterfaceFfiConverter();
+
+class {{ ffi_converter_name }} extends UniffiCallbackInterfaceFfiConverter {
+
+    static lift(handle) {
+    }
+
+    static read(buf) {
+    }
+
+    static lower(cb) {
+    }
+
+    static write(cb, buf) {
+    }
+}

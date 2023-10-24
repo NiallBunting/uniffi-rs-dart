@@ -47,7 +47,7 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
         //raise InternalError("Raw enum value doesn't match any cases")
     }
 
-    write(value, buf) {
+    static write(value, buf) {
         //{%- for variant in e.variants() %}
         //{%- if e.is_flat() %}
         //if value == {{ type_name }}.{{ variant.name()|enum_variant_py }}:
@@ -60,6 +60,14 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
         //    {%- endfor %}
         //{%- endif %}
         //{%- endfor %}
+    }
+
+    static lift(val) {
+      return  val;
+    }
+
+    static lower(val) {
+      return  val;
     }
 
 }
