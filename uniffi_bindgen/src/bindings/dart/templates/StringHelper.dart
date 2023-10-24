@@ -1,4 +1,7 @@
 class _UniffiConverterString {
+
+    late Pointer<_UniffiRustBuffer> _pointer;
+
     static check(value) {
         /*if not isinstance(value, str):
             raise TypeError("argument must be str, not {}".format(type(value).__name__))
@@ -9,8 +12,21 @@ class _UniffiConverterString {
       return buf.data.toDartString();
     }
 
-    static _UniffiRustBuffer lower(String value) {
-      print("TODO: Need to free string this");
-      return _UniffiRustBuffer.allocate(value.length, value.length, value.toNativeUtf8());
+    _UniffiRustBuffer lower(String value) {
+
+      _pointer = calloc<_UniffiRustBuffer>();
+      _pointer.ref
+        ..capacity = value.length
+        ..len = value.length
+        ..data = value.toNativeUtf8();
+
+      return _pointer.ref;
+    }
+
+    @override
+    void dispose() {
+        if (_pointer != null) {
+            calloc.free(this._pointer);
+        }
     }
 }

@@ -52,6 +52,6 @@ class UniffiCallbackInterfaceFfiConverter {
     static lift(handle) {
     }
 
-    static lower(cb) {
+    lower(cb) {
     }
 }

@@ -15,6 +15,6 @@ class {{ ffi_converter_name }} extends UniffiCallbackInterfaceFfiConverter {
     static lift(handle) {
     }
 
-    static lower(buf) {
+    lower(buf) {
     }
 }

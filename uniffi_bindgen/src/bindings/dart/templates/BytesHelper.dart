@@ -5,7 +5,7 @@ class _UniffiConverterBytes extends _UniffiConverterRustBuffer {
       return buf;
    }
 
-    static lower(val) {
+    lower(val) {
       return  val;
     }
 }

@@ -8,7 +8,7 @@ class _UniffiConverterPrimitive {
         return value;
     }
 
-    static lower(value) {
+    lower(value) {
         return value;
     }
 }
@@ -63,7 +63,7 @@ class _UniffiConverterRustBuffer {
         //    return cls.read(stream)
     }
 
-    static lower(value) {
+    lower(value) {
         //with _UniffiRustBuffer.alloc_with_builder() as builder:
         //    cls.write(value, builder)
         //    return builder.finalize()

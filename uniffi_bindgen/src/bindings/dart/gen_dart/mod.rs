@@ -477,7 +477,7 @@ pub mod filters {
     }
 
     pub fn lower_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {
-        Ok(format!("{}.lower", ffi_converter_name(as_ct)?))
+        Ok(format!("{}().lower", ffi_converter_name(as_ct)?))
     }
 
     pub fn read_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {

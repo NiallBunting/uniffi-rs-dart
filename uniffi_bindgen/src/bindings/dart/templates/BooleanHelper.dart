@@ -1,6 +1,6 @@
 class _UniffiConverterBool extends _UniffiConverterPrimitive {
 
-  static lower(val) {
+  lower(val) {
     return val;
   }
 

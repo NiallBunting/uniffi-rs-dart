@@ -24,6 +24,6 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
     static lift(item) {
     }
 
-    static lower(item) {
+    lower(item) {
     }
 }

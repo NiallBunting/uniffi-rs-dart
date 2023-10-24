@@ -52,7 +52,7 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
         {%- endfor %}
     }
 
-    static lower(value) {
+    lower(value) {
     }
 
     static lift(value) {

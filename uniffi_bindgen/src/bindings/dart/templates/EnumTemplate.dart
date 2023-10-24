@@ -66,7 +66,7 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
       return  val;
     }
 
-    static lower(val) {
+    lower(val) {
       return  val;
     }
 

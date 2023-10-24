@@ -6,7 +6,7 @@ class _UniffiConverterDuration extends _UniffiConverterRustBuffer {
       return  val;
     }
 
-    static lower(val) {
+    lower(val) {
       return  val;
     }
 }

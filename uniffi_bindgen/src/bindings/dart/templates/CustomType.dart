@@ -10,7 +10,7 @@ class _UniffiConverterType{{ name }} {
         return {{ builtin|ffi_converter_name }}.lift(value)
     }
 
-    static lower(value) {
+    lower(value) {
         return {{ builtin|ffi_converter_name }}.lower(value)
     }
 }
@@ -46,7 +46,7 @@ class _UniffiConverterType{{ name }} {
         return {{ config.into_custom.render("builtin_value") }}
     }
 
-    static lower(value) {
+    lower(value) {
         builtin_value = {{ config.from_custom.render("value") }}
         return {{ builtin|lower_fn }}(builtin_value)
     }

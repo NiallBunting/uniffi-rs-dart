@@ -3,7 +3,7 @@ class _UniffiConverterFloat extends _UniffiConverterPrimitiveFloat {
       return buf;
    }
 
-    static lower(val) {
+    lower(val) {
       return  val;
     }
 }

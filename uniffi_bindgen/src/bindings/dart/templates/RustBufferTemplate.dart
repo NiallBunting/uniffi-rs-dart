@@ -8,27 +8,11 @@ final class _UniffiRustBuffer extends Struct {
 
   external Pointer<Utf8> data;
 
-  factory _UniffiRustBuffer.allocate(int capacity, int len, Pointer<Utf8> data) =>
-      calloc<_UniffiRustBuffer>().ref
-        ..capacity = capacity
-        ..len = len
-        ..data = data;
-  //factory _UniffiRustBuffer(Pointer<Utf8> data, int len) {
-  //  return _UniffiRustBuffer.allocate()
-  //    ..data = data
-  //    ..capacity = len
-  //    ..len = len;
-  //}
-
-  //factory _UniffiRustBuffer allocate({int count = 1}) {
-  //  return Pointer<_UniffiRustBuffer>.allocate(count: count).load();
-  //}
-
-
-  //factory _UniffiRustBuffer.allocate(int cap, int len) =>
-  //    allocate<_UniffiRustBuffer>(1 * sizeOf<_UniffiRustBuffer>()).ref
-  //      ..capacity = cap
-  //      ..unit = initUnit;
+  //factory _UniffiRustBuffer.allocate(int capacity, int len, Pointer<Utf8> data) =>
+  //    calloc<_UniffiRustBuffer>().ref
+  //      ..capacity = capacity
+  //      ..len = len
+  //      ..data = data;
 }
 //class _UniffiRustBuffer(ctypes.Structure):
 //    _fields_ = [

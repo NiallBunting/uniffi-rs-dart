@@ -3,7 +3,7 @@ class _UniffiConverterUInt64 extends _UniffiConverterPrimitiveInt {
      return buf;
   }
 
-  static lower(val) {
+  lower(val) {
     return val;
   }
 }
