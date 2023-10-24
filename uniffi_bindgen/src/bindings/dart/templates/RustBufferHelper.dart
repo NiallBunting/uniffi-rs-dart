@@ -1,7 +1,7 @@
 // Types conforming to `_UniffiConverterPrimitive` pass themselves directly over the FFI.
 class _UniffiConverterPrimitive {
     static check(value) {
-        return value;
+        return true;
     }
 
     static lift(value) {
@@ -9,15 +9,7 @@ class _UniffiConverterPrimitive {
     }
 
     static lower(value) {
-        return lowerUnchecked(check(value));
-    }
-
-    static lowerUnchecked(value) {
         return value;
-    }
-
-    static write(value, buf) {
-        //cls.write_unchecked(cls.check(value), buf)
     }
 }
 

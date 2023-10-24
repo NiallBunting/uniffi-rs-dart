@@ -52,12 +52,6 @@ class UniffiCallbackInterfaceFfiConverter {
     static lift(handle) {
     }
 
-    static read(buf) {
-    }
-
     static lower(cb) {
-    }
-
-    static write(cb, buf) {
     }
 }

@@ -15,12 +15,6 @@ class {{ ffi_converter_name }} extends UniffiCallbackInterfaceFfiConverter {
     static lift(handle) {
     }
 
-    static read(buf) {
-    }
-
-    static lower(cb) {
-    }
-
-    static write(cb, buf) {
+    static lower(buf) {
     }
 }

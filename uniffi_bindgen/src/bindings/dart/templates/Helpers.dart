@@ -17,6 +17,15 @@ _rustCall(fn, rustCallStatus) {
 _rustCallWithError(_UniffiConverterRustBuffer? error, fn, Pointer<_UniffiRustCallStatus> rustCallStatus) {
   var a = fn();
 
+  if (error != null) {
+    if (rustCallStatus.ref.code == 1) {
+      print("Something errored");
+    }
+    if (rustCallStatus.ref.code == 2) {
+      print("Something paniced");
+    }
+  }
+
   calloc.free(rustCallStatus);
   return a;
 }
