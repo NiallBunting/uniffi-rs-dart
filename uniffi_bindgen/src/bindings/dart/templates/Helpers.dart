@@ -8,14 +8,19 @@ final class _UniffiRustCallStatus extends Struct {
   external _UniffiRustBuffer error_buf;
 }
 
+
+
+enum RUST_CALL_STATUS { CALL_SUCCESS, CALL_ERROR, CALL_PANIC }
+
+
 // This is just a wrapper
 _rustCall(fn, rustCallStatus) {
   return _rustCallWithError(null, fn, rustCallStatus);
 }
 
 // This is just a wrapper
-_rustCallWithError(_UniffiConverterRustBuffer? error, fn, Pointer<_UniffiRustCallStatus> rustCallStatus) {
-  var a = fn();
+_rustCallWithError(_UniffiWithError? error, fn, Pointer<_UniffiRustCallStatus> rustCallStatus) {
+  var fnResult = fn();
 
   if (error != null) {
     if (rustCallStatus.ref.code == 1) {
@@ -26,8 +31,26 @@ _rustCallWithError(_UniffiConverterRustBuffer? error, fn, Pointer<_UniffiRustCal
     }
   }
 
+  _rustCallCheckStatus(error, rustCallStatus);
+
   calloc.free(rustCallStatus);
-  return a;
+  return fnResult;
+}
+
+void _rustCallCheckStatus(_UniffiWithError? error, Pointer<_UniffiRustCallStatus> rustCallStatus) {
+  if (rustCallStatus.ref.code == RUST_CALL_STATUS.CALL_SUCCESS.index) {
+    return;
+  } else if (rustCallStatus.ref.code == RUST_CALL_STATUS.CALL_ERROR.index) {
+    if(error == null) {
+      throw 'CALL_ERROR but error converter is null.';
+    } else {
+      return error.liftNotStatic(rustCallStatus);
+    }
+  } else if (rustCallStatus.ref.code == RUST_CALL_STATUS.CALL_PANIC.index) {
+    throw 'Panic: Rust Panic: ${rustCallStatus.ref.error_buf.data.toDartString()}';
+  } else {
+    throw 'PANIC: rustCallStatus.ref.code undefined value: ${rustCallStatus.ref.code}';
+  }
 }
 
 //class InternalError(Exception):

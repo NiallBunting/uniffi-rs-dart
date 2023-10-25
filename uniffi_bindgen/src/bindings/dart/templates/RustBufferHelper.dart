@@ -58,14 +58,26 @@ class _UniffiConverterPrimitiveFloat extends _UniffiConverterPrimitive {
 // Classes should inherit from this and implement the `read` and `write` static methods.
 class _UniffiConverterRustBuffer {
 
-    static lift(rbuf) {
-        //with rbuf.consume_with_stream() as stream:
-        //    return cls.read(stream)
+    static lift(_UniffiRustBuffer buf) {
+        return buf;
     }
 
-    lower(value) {
-        //with _UniffiRustBuffer.alloc_with_builder() as builder:
-        //    cls.write(value, builder)
-        //    return builder.finalize()
+    liftNotStatic(_UniffiRustBuffer buf) {
+      return lift(buf);
+    }
+
+    _UniffiRustBuffer lower(value) {
+      return value;
+    }
+}
+
+class _UniffiWithError {
+    static _UniffiRustBuffer lift(Pointer<_UniffiRustCallStatus> val) {
+      return val.ref.error_buf;
+    }
+
+    @override
+    liftNotStatic(Pointer<_UniffiRustCallStatus> buf) {
+      return lift(buf);
     }
 }

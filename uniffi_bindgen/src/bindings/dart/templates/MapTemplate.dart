@@ -5,8 +5,10 @@
 class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
 
     static lift(buf){
+      return buf;
     }
 
     lower(buf){
+      return buf;
     }
 }

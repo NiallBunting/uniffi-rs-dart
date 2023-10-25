@@ -53,8 +53,10 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
     }
 
     lower(value) {
+      return value;
     }
 
     static lift(value) {
+      return value;
     }
 }

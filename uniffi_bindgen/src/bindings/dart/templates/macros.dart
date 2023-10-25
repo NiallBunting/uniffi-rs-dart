@@ -123,9 +123,7 @@ final Pointer<_UniffiRustCallStatus> _rustCallStatus = calloc<_UniffiRustCallSta
 
 {%- else -%}
 {%-     match meth.return_type() %}
-
 {%-         when Some with (return_type) %}
-
     // method: 2
     {{ return_type|type_name }} {{ py_method_name }}({% call arg_list_decl(meth) %}) {
         {%- call setup_args(meth) %}
@@ -135,13 +133,10 @@ final Pointer<_UniffiRustCallStatus> _rustCallStatus = calloc<_UniffiRustCallSta
             {% call to_ffi_call_with_prefix("_pointer", meth, "_rustCallStatus") %}
         );
     }
-
 {%-         when None %}
-
     // method: 3
     {{ py_method_name }}({% call arg_list_decl(meth) %}){
-        {%- call setup_args(meth) %}
-
+        {%- call setup_args(meth) -%}
         {%- call create_rust_callback() %}
         {% call to_ffi_call_with_prefix("_pointer", meth, "_rustCallStatus") %};
     }
