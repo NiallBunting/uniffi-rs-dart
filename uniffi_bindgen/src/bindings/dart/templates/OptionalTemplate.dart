@@ -4,7 +4,8 @@
 class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
     //static {{ type_name }} lift(_UniffiRustBuffer buf) {
     static {{ type_name }} lift(buf) {
-      if (buf[0] == "\u{1}") {
+      if (buf.len > 0) {
+        buf.data = Pointer.fromAddress(buf.data.address + 0x5);
         return {{ inner_ffi_converter }}.lift(buf);
       } else {
         return null;
