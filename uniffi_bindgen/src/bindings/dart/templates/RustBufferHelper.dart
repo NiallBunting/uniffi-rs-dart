@@ -80,4 +80,7 @@ class _UniffiWithError {
     liftNotStatic(Pointer<_UniffiRustCallStatus> buf) {
       return lift(buf);
     }
+
+    toError(Pointer<_UniffiRustCallStatus> val) {
+    }
 }

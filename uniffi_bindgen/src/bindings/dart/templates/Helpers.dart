@@ -22,15 +22,6 @@ _rustCall(fn, rustCallStatus) {
 _rustCallWithError(_UniffiWithError? error, fn, Pointer<_UniffiRustCallStatus> rustCallStatus) {
   var fnResult = fn();
 
-  if (error != null) {
-    if (rustCallStatus.ref.code == 1) {
-      print("Something errored");
-    }
-    if (rustCallStatus.ref.code == 2) {
-      print("Something paniced");
-    }
-  }
-
   _rustCallCheckStatus(error, rustCallStatus);
 
   calloc.free(rustCallStatus);
@@ -44,7 +35,7 @@ void _rustCallCheckStatus(_UniffiWithError? error, Pointer<_UniffiRustCallStatus
     if(error == null) {
       throw 'CALL_ERROR but error converter is null.';
     } else {
-      return error.liftNotStatic(rustCallStatus);
+      throw error.toError(rustCallStatus);
     }
   } else if (rustCallStatus.ref.code == RUST_CALL_STATUS.CALL_PANIC.index) {
     throw 'Panic: Rust Panic: ${rustCallStatus.ref.error_buf.data.toDartString()}';
