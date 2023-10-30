@@ -353,7 +353,7 @@ impl PythonCodeOracle {
             FfiType::ForeignExecutorHandle => "Size".to_string(),
             FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
             FfiType::RustFutureHandle => "Pointer".to_string(),
-            FfiType::RustFutureContinuationCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+            FfiType::RustFutureContinuationCallback => "Pointer<NativeFunction<_continationCallbackTypedef>>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
             FfiType::RustFutureContinuationData => "Size".to_string(),
         }
     }
@@ -381,10 +381,24 @@ impl PythonCodeOracle {
             FfiType::ForeignExecutorHandle => "int".to_string(),
             FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
             FfiType::RustFutureHandle => "Pointer".to_string(),
-            FfiType::RustFutureContinuationCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+            FfiType::RustFutureContinuationCallback => "Pointer<NativeFunction<_continationCallbackTypedef>>".to_string(),//_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
             FfiType::RustFutureContinuationData => "int".to_string(),
         }
     }
+
+
+//319             FfiType::ForeignBytes => "_UniffiForeignBytes".to_string(),
+//320             FfiType::ForeignCallback => "_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+//321             // Pointer to an `asyncio.EventLoop` instance
+//322             FfiType::ForeignExecutorHandle => "ctypes.c_size_t".to_string(),
+//323             FfiType::ForeignExecutorCallback => "_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
+//324             FfiType::RustFutureHandle => "ctypes.c_void_p".to_string(),
+//325             FfiType::RustFutureContinuationCallback => "_UNIFFI_FUTURE_CONTINUATION_T".to_string(),
+//326             FfiType::RustFutureContinuationData => "ctypes.c_size_t".to_string(),
+
+
+
+
 
     /// Get the name of the protocol and class name for an object.
     ///

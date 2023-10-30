@@ -16,6 +16,58 @@
 //    if not future.cancelled():
 //        future.set_result(poll_code)
 //
+
+typedef _continationCallbackTypedef = Void Function(Pointer ptr, Int32 i);
+
+void _uniffiFutureContinuationCallback(Pointer pointer, int pollResult) {
+  _ContinuationHolder.finishCompleter(pollResult, pollResult);
+}
+
+enum _UNIFFI_RUST_FUTURE_POLL {
+  READY,
+  MAYBE_READY,
+}
+
+_rustCallAsync(fn, lift_func, _UniffiWithError? error) async {
+  try {
+
+    while(true) {
+      var _completer = _ContinuationHolder.createCompleter();
+
+      _UniffiLib_ffi_matrix_sdk_ffi_rust_future_poll_pointer_func(fn, _completer.hashCode);
+
+      var pollCode = await _completer.future;
+      if (pollCode == _UNIFFI_RUST_FUTURE_POLL.READY.index) {
+        break;
+      }
+    }
+
+    {%- call py::create_rust_callback() %}
+    return lift_func(
+      _rustCallWithError(error, () => _UniffiLib_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer_func(fn, _rustCallStatus), _rustCallStatus)
+    );
+
+  } finally {
+    _UniffiLib_ffi_matrix_sdk_ffi_rust_future_free_pointer_func(fn);
+  }
+}
+
+class _ContinuationHolder {
+  static final Map<int, Completer> holder = Map<int, Completer>();
+
+  static Completer createCompleter() {
+    var _completer = new Completer();
+    holder[_completer.hashCode] = _completer;
+    return _completer;
+  }
+
+  static void finishCompleter(int completerHashCode, int result) {
+    if (holder[completerHashCode] != null) {
+      holder[completerHashCode]!.complete(result);
+    }
+    holder.remove(completerHashCode);
+  }
+}
 //async def _uniffi_rust_call_async(rust_future, ffi_poll, ffi_complete, ffi_free, lift_func, error_ffi_converter):
 //    try:
 //        eventloop = asyncio.get_running_loop()

@@ -94,31 +94,34 @@ final Pointer<_UniffiRustCallStatus> _rustCallStatus = calloc<_UniffiRustCallSta
 {%- macro method_decl(py_method_name, meth) %}
 {%  if meth.is_async() %}
 
-    {{ py_method_name }}({% call arg_list_decl(meth) %}) {
+    {%- match meth.return_type() -%}
+    {%- when Some with (return_type) -%}Future<{{- return_type|type_name -}}>{%- when None -%}void {%- endmatch %} {{ py_method_name }}({% call arg_list_decl(meth) %}) async {
         {%- call setup_args(meth) %}
-        /*{%- call create_rust_callback() %}
-        return _uniffi_rust_call_async(
-            _UniffiLib.{{ meth.ffi_func().name() }}(
-                self._pointer, {% call arg_list_lowered(meth, "_rustCallStatus") %}
-            ),
+
+        return _rustCallAsync(
+            // This doesn't need rust call status
+            _UniffiLib_{{ meth.ffi_func().name() }}_func (
+                _pointer, {% call arg_list_lowered(meth, "") %}
+            ),/*
+            _pointer,
             _UniffiLib.{{ meth.ffi_rust_future_poll(ci) }},
             _UniffiLib.{{ meth.ffi_rust_future_complete(ci) }},
-            _UniffiLib.{{ meth.ffi_rust_future_free(ci) }},
+            _UniffiLib.{{ meth.ffi_rust_future_free(ci) }},*/
             // lift function
             {%- match meth.return_type() %}
             {%- when Some(return_type) %}
             {{ return_type|lift_fn }},
             {%- when None %}
-            lambda val: None,
+            () => {},
             {% endmatch %}
             // Error FFI converter
             {%- match meth.throws_type() %}
             {%- when Some(e) %}
-            {{ e|ffi_converter_name }},
+            {{ e|ffi_converter_name }}(),
             {%- when None %}
-            None,
+            null,
             {%- endmatch %}
-        );*/
+        );
     }
 
 {%- else -%}

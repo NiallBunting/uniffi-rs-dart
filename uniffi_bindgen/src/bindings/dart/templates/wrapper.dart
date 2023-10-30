@@ -16,6 +16,7 @@
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'dart:io';
+import 'dart:async';
 
 
 {%- if ci.has_async_fns() %}
