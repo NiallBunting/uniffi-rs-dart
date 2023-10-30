@@ -52,34 +52,18 @@
 //    lib = ctypes.cdll.LoadLibrary(path)
 //    return lib
 
-class Loader {
+DynamicLibrary _uniffiLoadDynamicLibrary() {
 
-  static late DynamicLibrary _lib;
+  final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "./lib{{ config.cdylib_name() }}.so";
+  return Platform.isIOS
+      ? DynamicLibrary.process()
+      : Platform.isMacOS
+          ? DynamicLibrary.executable()
+          : DynamicLibrary.open(path);
 
-  static DynamicLibrary _uniffiLoadDynamicLibrary() {
-     if (_lib != null) {
-       return _lib;
-     }
-
-
-     print("a");
-  
-     // Set the continuation callback
-    _UniffiLib_ffi_matrix_sdk_ffi_rust_future_continuation_callback_set_func(Pointer.fromFunction<_continationCallbackTypedef>(_uniffiFutureContinuationCallback));
-  
-    final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "./lib{{ config.cdylib_name() }}.so";
-    _lib = Platform.isIOS
-        ? DynamicLibrary.process()
-        : Platform.isMacOS
-            ? DynamicLibrary.executable()
-            : DynamicLibrary.open(path);
-    return _lib;
-  
-  }
 }
 
-final DynamicLibrary _uniffiLib = Loader._uniffiLoadDynamicLibrary();
-
+final _uniffiLib = _uniffiLoadDynamicLibrary();
 //
 //def _uniffi_check_contract_api_version(lib):
 //    # Get the bindings contract version from our ComponentInterface

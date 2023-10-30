@@ -17,10 +17,10 @@
 //        future.set_result(poll_code)
 //
 
-typedef _continationCallbackTypedef = Void Function(Pointer ptr, Int32 i);
+typedef _continationCallbackTypedef = Void Function(Int32 ptr, Int32 i);
 
-void _uniffiFutureContinuationCallback(Pointer pointer, int pollResult) {
-  _ContinuationHolder.finishCompleter(pollResult, pollResult);
+void _uniffiFutureContinuationCallback(int pointer, int pollResult) {
+  _ContinuationHolder.finishCompleter(pointer, pollResult);
 }
 
 enum _UNIFFI_RUST_FUTURE_POLL {
@@ -28,13 +28,21 @@ enum _UNIFFI_RUST_FUTURE_POLL {
   MAYBE_READY,
 }
 
-_rustCallAsync(fn, lift_func, _UniffiWithError? error) async {
+bool _callbackLibLoaded = false;
+
+_rustCallAsync(fn, ffi_poll, ffi_complete, ffi_free, lift_func, _UniffiWithError? error) async {
+
+  if(_callbackLibLoaded == false) {
+    _UniffiLib_ffi_matrix_sdk_ffi_rust_future_continuation_callback_set_func(Pointer.fromFunction<_continationCallbackTypedef>(_uniffiFutureContinuationCallback));
+    _callbackLibLoaded = true;
+  }
+
   try {
 
     while(true) {
       var _completer = _ContinuationHolder.createCompleter();
 
-      _UniffiLib_ffi_matrix_sdk_ffi_rust_future_poll_pointer_func(fn, _completer.hashCode);
+      ffi_poll(fn, _completer.hashCode);
 
       var pollCode = await _completer.future;
       if (pollCode == _UNIFFI_RUST_FUTURE_POLL.READY.index) {
@@ -44,11 +52,11 @@ _rustCallAsync(fn, lift_func, _UniffiWithError? error) async {
 
     {%- call py::create_rust_callback() %}
     return lift_func(
-      _rustCallWithError(error, () => _UniffiLib_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer_func(fn, _rustCallStatus), _rustCallStatus)
+      _rustCallWithError(error, () => ffi_complete(fn, _rustCallStatus), _rustCallStatus)
     );
 
   } finally {
-    _UniffiLib_ffi_matrix_sdk_ffi_rust_future_free_pointer_func(fn);
+    ffi_free(fn);
   }
 }
 

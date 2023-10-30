@@ -12,9 +12,11 @@
 
 class {{ ffi_converter_name }} extends UniffiCallbackInterfaceFfiConverter {
 
-    static lift(handle) {
+    static lift(Pointer _pointer) {
+      return _pointer;
     }
 
-    lower(buf) {
+    lower(value) {
+      return value;
     }
 }

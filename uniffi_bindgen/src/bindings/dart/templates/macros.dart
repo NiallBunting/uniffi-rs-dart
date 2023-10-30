@@ -98,21 +98,21 @@ final Pointer<_UniffiRustCallStatus> _rustCallStatus = calloc<_UniffiRustCallSta
     {%- when Some with (return_type) -%}Future<{{- return_type|type_name -}}>{%- when None -%}void {%- endmatch %} {{ py_method_name }}({% call arg_list_decl(meth) %}) async {
         {%- call setup_args(meth) %}
 
-        return _rustCallAsync(
+        return await _rustCallAsync(
             // This doesn't need rust call status
             _UniffiLib_{{ meth.ffi_func().name() }}_func (
                 _pointer, {% call arg_list_lowered(meth, "") %}
-            ),/*
-            _pointer,
-            _UniffiLib.{{ meth.ffi_rust_future_poll(ci) }},
-            _UniffiLib.{{ meth.ffi_rust_future_complete(ci) }},
-            _UniffiLib.{{ meth.ffi_rust_future_free(ci) }},*/
+            ),
+            //_pointer,
+            _UniffiLib_{{ meth.ffi_rust_future_poll(ci) }}_func,
+            _UniffiLib_{{ meth.ffi_rust_future_complete(ci) }}_func,
+            _UniffiLib_{{ meth.ffi_rust_future_free(ci) }}_func,
             // lift function
             {%- match meth.return_type() %}
             {%- when Some(return_type) %}
             {{ return_type|lift_fn }},
             {%- when None %}
-            () => {},
+            (value) => {},
             {% endmatch %}
             // Error FFI converter
             {%- match meth.throws_type() %}

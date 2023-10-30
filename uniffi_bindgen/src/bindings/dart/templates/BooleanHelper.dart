@@ -7,4 +7,8 @@ class _UniffiConverterBool extends _UniffiConverterPrimitive {
   static bool lift(bool buf) {
      return buf;
   }
+
+  static bool read(_UniffiRustBuffer buf) {
+     return buf;
+  }
 }

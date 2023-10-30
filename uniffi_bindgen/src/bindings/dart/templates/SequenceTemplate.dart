@@ -8,7 +8,7 @@ class {{ ffi_converter_name}} extends _UniffiConverterRustBuffer {
     static lift(_UniffiRustBuffer buf) {
         var count = buf.data.cast<Int32>();
         print(count.value);
-        print("TODO");
+        print("TODO: creating list");
         List<{{ inner_type_name }}> list = [];
         return list;
     }

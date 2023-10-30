@@ -8,6 +8,7 @@
 class {{ impl_name }} {
     //late {{ impl_name }} _pointer;
     late Pointer _pointer;
+    Pointer get pointer => _pointer;
 
 {%- match obj.primary_constructor() %}
 {%-     when Some with (cons) %}
