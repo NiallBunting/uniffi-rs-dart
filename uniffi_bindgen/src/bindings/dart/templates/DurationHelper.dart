@@ -2,11 +2,12 @@
 // which are accurate to the nanosecond,
 // to Python durations, which are only accurate to the microsecond.
 class _UniffiConverterDuration extends _UniffiConverterRustBuffer {
-    static lift(val) {
-      return  val;
+
+    static read(_UniffiRustBufferBuilder buf) {
+       return buf;
     }
 
-    lower(val) {
-      return  val;
+    static write(_UniffiRustBufferBuilder buf, value) {
+       return buf;
     }
 }

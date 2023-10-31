@@ -89,7 +89,7 @@ class {{ ffi_converter_name }} {
     _handle_map = ConcurrentHandleMap()
     {%- endif %}
 
-    static {{ impl_name }} lift(Pointer _pointer) {
+    {{ impl_name }} lift(Pointer _pointer) {
       // TODO: Do something with value?
       return {{ impl_name }}.fromPointer(_pointer);
     }
@@ -111,14 +111,17 @@ class {{ ffi_converter_name }} {
         return {{ protocol_name }}();
     }*/
 
-    static read(_UniffiRustBuffer buf) {
-        //ptr = buf.read_u64()
-        //if ptr == 0:
-        //    raise InternalError("Raw pointer value was null")
-        //return lift(ptr)
+    static read(_UniffiRustBufferBuilder buf) {
+        var ptr = buf.read_i64();
+        if (ptr == 0) {
+            throw 'Issue with pointer'; 
+        }
+        return {{ ffi_converter_name }}().lift(ptr);
     }
 
-    static write({{ protocol_name }} value, _UniffiRustBuffer buf) {
-        //buf.write_u64(cls.lower(value))
+    static _UniffiRustBufferBuilder write(value) {
+      //buf.write_u64(cls.lower(value)) 
+        Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
+        return _rustBuffer.ref.buffer;
     }
 }

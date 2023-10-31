@@ -1,14 +1,13 @@
 class _UniffiConverterBool extends _UniffiConverterPrimitive {
 
-  lower(val) {
-    return val;
-  }
 
-  static bool lift(bool buf) {
-     return buf;
-  }
+    static read(_UniffiRustBufferBuilder buf) {
+        return buf.data.cast<Bool>();
+    }
 
-  static bool read(_UniffiRustBuffer buf) {
-     return buf;
-  }
+    static _UniffiRustBufferBuilder write(value) {
+        Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
+        return _rustBuffer.ref.buffer;
+        //buf.data.cast<Double> = value;
+    }
 }

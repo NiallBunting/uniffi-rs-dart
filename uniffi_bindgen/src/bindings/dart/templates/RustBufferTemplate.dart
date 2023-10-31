@@ -13,6 +13,8 @@ final class _UniffiRustBuffer extends Struct {
   //      ..capacity = capacity
   //      ..len = len
   //      ..data = data;
+  
+  _UniffiRustBufferBuilder get buffer => _UniffiRustBufferBuilder(data, len);
 }
 //class _UniffiRustBuffer(ctypes.Structure):
 //    _fields_ = [
@@ -155,7 +157,57 @@ final class _UniffiRustBuffer extends Struct {
 //    def read_c_size_t(self):
 //        return self._unpack_from(ctypes.sizeof(ctypes.c_size_t) , "@N")
 //
-//class _UniffiRustBufferBuilder:
+class _UniffiRustBufferBuilder {
+  final Pointer<Utf8> data;
+  final int len;
+  late ByteData buffer;
+
+  int offset = 0;
+
+
+  _UniffiRustBufferBuilder(this.data, this.len) {
+    this.buffer = this.data.cast<Uint8>().asTypedList(this.len).buffer.asByteData(0);
+  }
+
+  _unpack() {
+
+  }
+
+  read_u8() {
+    if (this.offset + 1 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getUint8(this.offset);
+    this.offset += 1;
+    return retVal;
+  }
+
+  read_i32() {
+    if (this.offset + 4 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getInt32(this.offset, Endian.big);
+    this.offset += 4;
+    return retVal;
+  }
+
+  read_i64() {
+    if (this.offset + 8 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getInt64(this.offset, Endian.big);
+    this.offset += 8;
+    return retVal;
+  }
+
+  write_u8(value) {
+    if (this.offset + 1 > this.len) {
+      throw "Not enough bytes.";
+    }
+    buffer.setUint8(this.offset, value);
+    this.offset += 1;
+  }
+}
 //    """
 //    Helper for structured writing of bytes into a _UniffiRustBuffer.
 //    """

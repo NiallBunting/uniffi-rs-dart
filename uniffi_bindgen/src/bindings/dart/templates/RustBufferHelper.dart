@@ -4,7 +4,7 @@ class _UniffiConverterPrimitive {
         return true;
     }
 
-    static lift(value) {
+    lift(value) {
         return value;
     }
 
@@ -26,10 +26,6 @@ class _UniffiConverterPrimitiveInt extends _UniffiConverterPrimitive {
     //        raise ValueError("{} requires {} <= value < {}".format(cls.CLASS_NAME, cls.VALUE_MIN, cls.VALUE_MAX))
     //    return super().check(value)
 
-    static read(buf) {
-        return buf;
-    }
-
     static write_unchecked(value, buf) {
         return value;
     }
@@ -45,9 +41,6 @@ class _UniffiConverterPrimitiveFloat extends _UniffiConverterPrimitive {
     //    if not isinstance(value, float):
     //        raise TypeError("__float__ returned non-float (type {})".format(type(value).__name__))
     //    return super().check(value)
-    static read(buf) {
-        return buf;
-    }
 
     static write_unchecked(value, buf) {
         return value;
@@ -58,16 +51,31 @@ class _UniffiConverterPrimitiveFloat extends _UniffiConverterPrimitive {
 // Classes should inherit from this and implement the `read` and `write` static methods.
 class _UniffiConverterRustBuffer {
 
-    static lift(_UniffiRustBuffer buf) {
-        return buf;
-    }
+    Pointer<_UniffiRustBuffer>? _rustBuffer;
 
-    liftNotStatic(_UniffiRustBuffer buf) {
-      return lift(buf);
+    lift(_UniffiRustBuffer buf) {
+        return read(buf.buffer);
     }
 
     _UniffiRustBuffer lower(value) {
-      return value;
+      _rustBuffer = calloc<_UniffiRustBuffer >();
+      write(_rustBuffer!.ref.buffer, value);
+      return _rustBuffer!.ref;
+    }
+
+    static read(_UniffiRustBufferBuilder buf) {
+       return buf;
+    }
+
+    static write(_UniffiRustBufferBuilder buf, value) {
+       return buf;
+    }
+
+    @override
+    void dispose() {
+        if (_rustBuffer != null) {
+            calloc.free(this._rustBuffer!);
+        }
     }
 }
 
@@ -83,4 +91,7 @@ class _UniffiWithError {
 
     toError(Pointer<_UniffiRustCallStatus> val) {
     }
+  static read(_UniffiRustBuffer buf) {
+     return buf;
+  }
 }

@@ -17,6 +17,8 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'dart:io';
 import 'dart:async';
+import 'package:mutex/mutex.dart';
+import 'dart:typed_data';
 
 
 {%- if ci.has_async_fns() %}

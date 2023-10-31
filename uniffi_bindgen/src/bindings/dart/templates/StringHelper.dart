@@ -8,7 +8,7 @@ class _UniffiConverterString {
         return value*/
     }
 
-    static String lift(_UniffiRustBuffer buf) {
+    String lift(_UniffiRustBuffer buf) {
       return buf.data.toDartString();
     }
 
@@ -23,10 +23,26 @@ class _UniffiConverterString {
       return _pointer.ref;
     }
 
+
+
     @override
     void dispose() {
         if (_pointer != null) {
             calloc.free(this._pointer);
         }
+    }
+
+    static read(_UniffiRustBufferBuilder buf) {
+      return "string";
+    }
+
+    static _UniffiRustBufferBuilder write(String value) {
+      Pointer<_UniffiRustBuffer> pointer = calloc<_UniffiRustBuffer>();
+      pointer.ref
+        ..capacity = value.length
+        ..len = value.length
+        ..data = value.toNativeUtf8();
+
+      return pointer.ref.buffer;
     }
 }

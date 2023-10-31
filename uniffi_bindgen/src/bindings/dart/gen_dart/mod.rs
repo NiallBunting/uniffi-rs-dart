@@ -348,7 +348,7 @@ impl PythonCodeOracle {
                 None => "_UniffiRustBuffer".to_string(),
             },
             FfiType::ForeignBytes => "Pointer<_UniffiRustCallStatus>".to_string(),//_UniffiForeignBytes".to_string(),
-            FfiType::ForeignCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+            FfiType::ForeignCallback => "Pointer<NativeFunction<Void Function(Int64, Int32, Pointer<Uint8>, Int32, Pointer<_UniffiRustBuffer>)>>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
             // Pointer to an `asyncio.EventLoop` instance
             FfiType::ForeignExecutorHandle => "Size".to_string(),
             FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
@@ -376,7 +376,7 @@ impl PythonCodeOracle {
                 None => "_UniffiRustBuffer".to_string(),
             },
             FfiType::ForeignBytes => "Pointer<_UniffiRustCallStatus>".to_string(),//_UniffiForeignBytes".to_string(),
-            FfiType::ForeignCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
+            FfiType::ForeignCallback => "Pointer<NativeFunction<Void Function(Int64, Int32, Pointer<Uint8>, Int32, Pointer<_UniffiRustBuffer>)>>".to_string(),//_UNIFFI_FOREIGN_CALLBACK_T".to_string(),
             // Pointer to an `asyncio.EventLoop` instance
             FfiType::ForeignExecutorHandle => "int".to_string(),
             FfiType::ForeignExecutorCallback => "Pointer<_UniffiRustCallStatus>".to_string(),//_UNIFFI_FOREIGN_EXECUTOR_CALLBACK_T".to_string(),
@@ -487,7 +487,7 @@ pub mod filters {
     }
 
     pub fn lift_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {
-        Ok(format!("{}.lift", ffi_converter_name(as_ct)?))
+        Ok(format!("{}().lift", ffi_converter_name(as_ct)?))
     }
 
     pub fn lower_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {
