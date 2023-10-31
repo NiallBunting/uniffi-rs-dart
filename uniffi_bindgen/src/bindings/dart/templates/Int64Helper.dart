@@ -1,10 +1,10 @@
 class _UniffiConverterInt64 extends _UniffiConverterPrimitiveInt  {
 
-    static int read(_UniffiRustBufferBuilder buf) {
+    int read(_UniffiRustBufferBuilder buf) {
         return buf.read_i32();
     }
 
-    static _UniffiRustBufferBuilder write(int value) {
+    _UniffiRustBufferBuilder write(int value) {
       Pointer<_UniffiRustBuffer> pointer = calloc<_UniffiRustBuffer>();
       pointer.ref
         ..capacity = 8

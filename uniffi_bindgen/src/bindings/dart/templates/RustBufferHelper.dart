@@ -49,29 +49,32 @@ class _UniffiConverterPrimitiveFloat extends _UniffiConverterPrimitive {
 
 // Helper class for wrapper types that will always go through a _UniffiRustBuffer.
 // Classes should inherit from this and implement the `read` and `write` static methods.
-class _UniffiConverterRustBuffer {
+abstract interface class _UniffiConverterRustBuffer<T> {
 
     Pointer<_UniffiRustBuffer>? _rustBuffer;
 
-    lift(_UniffiRustBuffer buf) {
+    T lift(_UniffiRustBuffer buf) {
         return read(buf.buffer);
     }
 
-    _UniffiRustBuffer lower(value) {
+    _UniffiRustBuffer lower(T value) {
+
+      var bufferBuilder = _UniffiRustBufferBuilder();
+      write(bufferBuilder, value);
+
       _rustBuffer = calloc<_UniffiRustBuffer >();
-      write(_rustBuffer!.ref.buffer, value);
+      _rustBuffer!.ref
+        ..capacity = bufferBuilder.length
+        ..len = bufferBuilder.length
+        ..data = bufferBuilder.toNativeUtf8();
+
       return _rustBuffer!.ref;
     }
 
-    static read(_UniffiRustBufferBuilder buf) {
-       return buf;
-    }
+    T read(_UniffiRustBufferBuilder buf);
 
-    static write(_UniffiRustBufferBuilder buf, value) {
-       return buf;
-    }
+    write(_UniffiRustBufferBuilder buf, T value);
 
-    @override
     void dispose() {
         if (_rustBuffer != null) {
             calloc.free(this._rustBuffer!);

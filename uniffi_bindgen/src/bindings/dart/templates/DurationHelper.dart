@@ -3,11 +3,11 @@
 // to Python durations, which are only accurate to the microsecond.
 class _UniffiConverterDuration extends _UniffiConverterRustBuffer {
 
-    static read(_UniffiRustBufferBuilder buf) {
+    read(_UniffiRustBufferBuilder buf) {
        return buf;
     }
 
-    static write(_UniffiRustBufferBuilder buf, value) {
+    write(_UniffiRustBufferBuilder buf, value) {
        return buf;
     }
 }

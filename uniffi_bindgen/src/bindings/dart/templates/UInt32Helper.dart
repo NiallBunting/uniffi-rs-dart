@@ -1,11 +1,11 @@
 class _UniffiConverterUInt32 extends _UniffiConverterPrimitiveInt {
 
 
-    static read(_UniffiRustBufferBuilder buf) {
-        return buf.data.cast<Uint32>().value;
+    int read(_UniffiRustBufferBuilder buf) {
+        return buf.read_u32();
     }
 
-    static _UniffiRustBufferBuilder write(value) {
+    _UniffiRustBufferBuilder write(int value) {
         //buf.data.cast<Int16> = value;
         Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
         return _rustBuffer.ref.buffer;

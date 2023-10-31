@@ -5,7 +5,7 @@ Timestamp = datetime.datetime
 // which are accurate to the nanosecond,
 // to Python datetimes, which have a variable precision due to the use of float as representation.
 class _UniffiConverterTimestamp extends _UniffiConverterRustBuffer {
-    static read(buf) {
+    read(buf) {
         seconds = buf.read_i64()
         microseconds = buf.read_u32() / 1000
         // Use fromtimestamp(0) then add the seconds using a timedelta.  This
@@ -17,7 +17,7 @@ class _UniffiConverterTimestamp extends _UniffiConverterRustBuffer {
             return datetime.datetime.fromtimestamp(0, tz=datetime.timezone.utc) - datetime.timedelta(seconds=-seconds, microseconds=microseconds)
     }
 
-    static write(value, buf) {
+    write(value, buf) {
         if value >= datetime.datetime.fromtimestamp(0, datetime.timezone.utc):
             sign = 1
             delta = value - datetime.datetime.fromtimestamp(0, datetime.timezone.utc)

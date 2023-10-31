@@ -59,14 +59,6 @@ class _UniffiCallbackInterfaceFfiConverter {
 
   static final ConcurrentHandleMap _cm = ConcurrentHandleMap();
 
-  _UniffiCallbackInterfaceFfiConverter() {
-    if({{callback_handler_obj}}Set == false) {
-      _UniffiLib_{{ ffi_init_callback.name() }}_func({{ callback_handler_obj }}.nativeFunction);
-      print("seting callback");
-      {{callback_handler_obj}}Set = true;
-    }
-  }
-
   lift(int handle) {
     return _cm.get(handle);
   }

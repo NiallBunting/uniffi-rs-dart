@@ -111,15 +111,15 @@ class {{ ffi_converter_name }} {
         return {{ protocol_name }}();
     }*/
 
-    static read(_UniffiRustBufferBuilder buf) {
+    read(_UniffiRustBufferBuilder buf) {
         var ptr = buf.read_i64();
         if (ptr == 0) {
             throw 'Issue with pointer'; 
         }
-        return {{ ffi_converter_name }}().lift(ptr);
+        return {{ ffi_converter_name }}().lift(Pointer.fromAddress(ptr));
     }
 
-    static _UniffiRustBufferBuilder write(value) {
+    _UniffiRustBufferBuilder write(_UniffiRustBufferBuilder buf, value) {
       //buf.write_u64(cls.lower(value)) 
         Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
         return _rustBuffer.ref.buffer;

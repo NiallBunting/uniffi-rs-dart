@@ -495,11 +495,11 @@ pub mod filters {
     }
 
     pub fn read_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {
-        Ok(format!("{}.read", ffi_converter_name(as_ct)?))
+        Ok(format!("{}().read", ffi_converter_name(as_ct)?))
     }
 
     pub fn write_fn(as_ct: &impl AsCodeType) -> Result<String, askama::Error> {
-        Ok(format!("{}.write", ffi_converter_name(as_ct)?))
+        Ok(format!("{}().write", ffi_converter_name(as_ct)?))
     }
 
     pub fn literal_py(literal: &Literal, as_ct: &impl AsCodeType) -> Result<String, askama::Error> {

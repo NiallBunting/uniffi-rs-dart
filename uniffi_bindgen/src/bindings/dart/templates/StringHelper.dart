@@ -32,11 +32,11 @@ class _UniffiConverterString {
         }
     }
 
-    static read(_UniffiRustBufferBuilder buf) {
+    read(_UniffiRustBufferBuilder buf) {
       return "string";
     }
 
-    static _UniffiRustBufferBuilder write(String value) {
+    _UniffiRustBufferBuilder write(String value) {
       Pointer<_UniffiRustBuffer> pointer = calloc<_UniffiRustBuffer>();
       pointer.ref
         ..capacity = value.length

@@ -8,79 +8,8 @@ final class _UniffiRustBuffer extends Struct {
 
   external Pointer<Utf8> data;
 
-  //factory _UniffiRustBuffer.allocate(int capacity, int len, Pointer<Utf8> data) =>
-  //    calloc<_UniffiRustBuffer>().ref
-  //      ..capacity = capacity
-  //      ..len = len
-  //      ..data = data;
-  
-  _UniffiRustBufferBuilder get buffer => _UniffiRustBufferBuilder(data, len);
+  _UniffiRustBufferBuilder get buffer => _UniffiRustBufferBuilder.fromData(data, len);
 }
-//class _UniffiRustBuffer(ctypes.Structure):
-//    _fields_ = [
-//        ("capacity", ctypes.c_int32),
-//        ("len", ctypes.c_int32),
-//        ("data", ctypes.POINTER(ctypes.c_char)),
-//    ]
-//
-//    @staticmethod
-//    def alloc(size):
-//        return _rust_call(_UniffiLib.{{ ci.ffi_rustbuffer_alloc().name() }}, size)
-//
-//    @staticmethod
-//    def reserve(rbuf, additional):
-//        return _rust_call(_UniffiLib.{{ ci.ffi_rustbuffer_reserve().name() }}, rbuf, additional)
-//
-//    def free(self):
-//        return _rust_call(_UniffiLib.{{ ci.ffi_rustbuffer_free().name() }}, self)
-//
-//    def __str__(self):
-//        return "_UniffiRustBuffer(capacity={}, len={}, data={})".format(
-//            self.capacity,
-//            self.len,
-//            self.data[0:self.len]
-//        )
-//
-//    @contextlib.contextmanager
-//    def alloc_with_builder(*args):
-//        """Context-manger to allocate a buffer using a _UniffiRustBufferBuilder.
-//
-//        The allocated buffer will be automatically freed if an error occurs, ensuring that
-//        we don't accidentally leak it.
-//        """
-//        builder = _UniffiRustBufferBuilder()
-//        try:
-//            yield builder
-//        except:
-//            builder.discard()
-//            raise
-//
-//    @contextlib.contextmanager
-//    def consume_with_stream(self):
-//        """Context-manager to consume a buffer using a _UniffiRustBufferStream.
-//
-//        The _UniffiRustBuffer will be freed once the context-manager exits, ensuring that we don't
-//        leak it even if an error occurs.
-//        """
-//        try:
-//            s = _UniffiRustBufferStream.from_rust_buffer(self)
-//            yield s
-//            if s.remaining() != 0:
-//                raise RuntimeError("junk data left in buffer at end of consume_with_stream")
-//        finally:
-//            self.free()
-//
-//    @contextlib.contextmanager
-//    def read_with_stream(self):
-//        """Context-manager to read a buffer using a _UniffiRustBufferStream.
-//
-//        This is like consume_with_stream, but doesn't free the buffer afterwards.
-//        It should only be used with borrowed `_UniffiRustBuffer` data.
-//        """
-//        s = _UniffiRustBufferStream.from_rust_buffer(self)
-//        yield s
-//        if s.remaining() != 0:
-//            raise RuntimeError("junk data left in buffer at end of read_with_stream")
 
 //class _UniffiForeignBytes(ctypes.Structure):
 //    _fields_ = [
@@ -158,15 +87,34 @@ final class _UniffiRustBuffer extends Struct {
 //        return self._unpack_from(ctypes.sizeof(ctypes.c_size_t) , "@N")
 //
 class _UniffiRustBufferBuilder {
-  final Pointer<Utf8> data;
-  final int len;
-  late ByteData buffer;
 
+  late ByteData buffer;
+  late int len;
   int offset = 0;
 
+  _UniffiRustBufferBuilder([int len = 16]) {
+    this.offset = 0;
+    this.buffer = ByteData(len);
+    this.len = len;
+  }
 
-  _UniffiRustBufferBuilder(this.data, this.len) {
-    this.buffer = this.data.cast<Uint8>().asTypedList(this.len).buffer.asByteData(0);
+  _UniffiRustBufferBuilder.fromData(Pointer<Utf8> data, int len) {
+    this.offset = 0;
+    this.len = len;
+    this.buffer = data.cast<Uint8>().asTypedList(len).buffer.asByteData(0);
+  }
+
+  int get length => offset;
+
+  Pointer<Utf8> toNativeUtf8() {
+    final uint8List = buffer.buffer.asUint8List();
+    final result = calloc<Uint8>(this.offset);
+  
+    for (var i = 0; i < this.offset; ++i) {
+      result[i] = uint8List[i];
+    }
+  
+    return result.cast<Utf8>();
   }
 
   _unpack() {
@@ -182,12 +130,47 @@ class _UniffiRustBufferBuilder {
     return retVal;
   }
 
+  write_u8(value) {
+    if (this.offset + 1 > this.len) {
+      throw "Not enough bytes.";
+    }
+    buffer.setUint8(this.offset, value);
+    this.offset += 1;
+  }
+
   read_i32() {
     if (this.offset + 4 > this.len) {
       throw "Not enough bytes.";
     }
     var retVal = buffer.getInt32(this.offset, Endian.big);
     this.offset += 4;
+    return retVal;
+  }
+
+  read_u16() {
+    if (this.offset + 2 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getUint16(this.offset, Endian.big);
+    this.offset += 2;
+    return retVal;
+  }
+
+  read_u32() {
+    if (this.offset + 4 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getUint32(this.offset, Endian.big);
+    this.offset += 4;
+    return retVal;
+  }
+
+  read_u64() {
+    if (this.offset + 8 > this.len) {
+      throw "Not enough bytes.";
+    }
+    var retVal = buffer.getUint64(this.offset, Endian.big);
+    this.offset += 8;
     return retVal;
   }
 
@@ -200,12 +183,13 @@ class _UniffiRustBufferBuilder {
     return retVal;
   }
 
-  write_u8(value) {
-    if (this.offset + 1 > this.len) {
+  read_double() {
+    if (this.offset + 8 > this.len) {
       throw "Not enough bytes.";
     }
-    buffer.setUint8(this.offset, value);
-    this.offset += 1;
+    var retVal = buffer.getFloat64(this.offset, Endian.big);
+    this.offset += 8;
+    return retVal;
   }
 }
 //    """

@@ -4,11 +4,11 @@
 // Genearted by MapTemplate
 class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer {
 
-  static read(_UniffiRustBufferBuilder buf) {
+  read(_UniffiRustBufferBuilder buf) {
      return buf;
   }
 
-  static _UniffiRustBufferBuilder write(buf) {
+  _UniffiRustBufferBuilder write(_UniffiRustBufferBuilder buf, value) {
      return buf;
   }
 }

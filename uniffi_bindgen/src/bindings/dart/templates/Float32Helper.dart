@@ -1,5 +1,5 @@
 class _UniffiConverterFloat extends _UniffiConverterPrimitiveFloat {
-   static double lift(buf) {
+   double lift(buf) {
       return buf;
    }
 
@@ -12,7 +12,7 @@ class _UniffiConverterFloat extends _UniffiConverterPrimitiveFloat {
         return buf.data.cast<Float>();
     }
 
-    static _UniffiRustBuffer write(value) {
+    _UniffiRustBuffer write(value) {
         Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
         return _rustBuffer.buffer;
         //buf.data.cast<Double> = value;
