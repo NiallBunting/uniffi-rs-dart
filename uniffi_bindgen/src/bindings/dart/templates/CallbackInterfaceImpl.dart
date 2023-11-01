@@ -7,11 +7,11 @@ typedef {{ callback_handler_class }}Typedef = Void Function(Int64 handle, Int32 
 
 void {{ callback_handler_class}}(int handle, int method, Pointer<Uint8> args_data, int args_len, Pointer<_UniffiRustBuffer> buf_ptr) {
   print("calledback {{callback_handler_class}}");
-  print("handle {{handle}}");
-  print("method {{method}}");
-  print("args_data {{args_data}}");
-  print("args_len {{args_len}}");
-  print("buf_ptr {{buf_ptr}}");
+  print("handle ${handle}");
+  print("method ${method}");
+  print("args_data ${args_data}");
+  print("args_len ${args_len}");
+  print("buf_ptr ${buf_ptr}");
 }
 
 final {{ callback_handler_obj }} = NativeCallable<{{ callback_handler_class }}Typedef>.listener({{callback_handler_class}});

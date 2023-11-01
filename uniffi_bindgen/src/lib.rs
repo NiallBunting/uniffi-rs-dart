@@ -447,6 +447,7 @@ impl BindingsConfig for Config {
         self.bindings.swift.update_from_ci(ci);
         self.bindings.python.update_from_ci(ci);
         self.bindings.ruby.update_from_ci(ci);
+        self.bindings.dart.update_from_ci(ci);
     }
 
     fn update_from_cdylib_name(&mut self, cdylib_name: &str) {
@@ -454,6 +455,7 @@ impl BindingsConfig for Config {
         self.bindings.swift.update_from_cdylib_name(cdylib_name);
         self.bindings.python.update_from_cdylib_name(cdylib_name);
         self.bindings.ruby.update_from_cdylib_name(cdylib_name);
+        self.bindings.dart.update_from_cdylib_name(cdylib_name);
     }
 
     fn update_from_dependency_configs(&mut self, config_map: HashMap<&str, &Self>) {
@@ -479,6 +481,12 @@ impl BindingsConfig for Config {
             config_map
                 .iter()
                 .map(|(key, config)| (*key, &config.bindings.ruby))
+                .collect(),
+        );
+        self.bindings.dart.update_from_dependency_configs(
+            config_map
+                .iter()
+                .map(|(key, config)| (*key, &config.bindings.dart))
                 .collect(),
         );
     }
