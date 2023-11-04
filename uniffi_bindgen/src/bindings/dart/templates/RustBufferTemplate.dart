@@ -117,6 +117,22 @@ class _UniffiRustBufferBuilder {
     return result.cast<Utf8>();
   }
 
+  String toDartString(int? size) {
+    int end = len;
+    if (size != null) {
+      end = offset + size;
+      if (end > len) {
+        throw "Longer than string";
+      }
+    }
+
+    var sublist = Uint8List.sublistView(buffer, offset, end);
+
+    offset = end;
+    return String.fromCharCodes(sublist);
+  
+  }
+
   _unpack() {
 
   }

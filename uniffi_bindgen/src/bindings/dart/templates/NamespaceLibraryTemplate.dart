@@ -54,7 +54,7 @@
 
 DynamicLibrary _uniffiLoadDynamicLibrary() {
 
-  final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "./lib{{ config.cdylib_name() }}.so";
+  final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "lib{{ config.cdylib_name() }}.so";
   return Platform.isIOS
       ? DynamicLibrary.process()
       : Platform.isMacOS

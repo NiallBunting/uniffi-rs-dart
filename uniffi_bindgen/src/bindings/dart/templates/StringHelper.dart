@@ -33,7 +33,12 @@ class _UniffiConverterString {
     }
 
     read(_UniffiRustBufferBuilder buf) {
-      return "string";
+      var size = buf.read_i32();
+      if (size < 0) {
+          throw "Negative string length";
+      }
+      return buf.toDartString(size);
+      //return utf8_bytes.decode("utf-8")
     }
 
     _UniffiRustBufferBuilder write(String value) {

@@ -15,8 +15,13 @@ class {{ ffi_converter_name }} extends _UniffiCallbackInterfaceFfiConverter {
 
   {{ ffi_converter_name }}() {
     if({{callback_handler_obj}}Set == false) {
-      _UniffiLib_{{ ffi_init_callback.name() }}_func({{ callback_handler_obj }}.nativeFunction);
+      print("Setting: {{ ffi_init_callback.name() }}");
+      print({{callback_handler_obj}}.nativeFunction.address);
+      _UniffiLib_{{ ffi_init_callback.name() }}_func(Pointer.fromAddress({{ callback_handler_obj }}.nativeFunction.address));
       {{callback_handler_obj}}Set = true;
+
+      // Give some time for this to settle. Should probably figure out a better way to do this.
+      sleep(Duration(seconds: 1));
     }
   }
 

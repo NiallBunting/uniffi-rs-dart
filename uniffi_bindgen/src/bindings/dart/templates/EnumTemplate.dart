@@ -37,11 +37,12 @@ class {{ ffi_converter_name }} extends _UniffiConverterRustBuffer<{{type_name}}>
             {%- if e.is_flat() %}
             return {{ type_name }}.{{variant.name()|enum_variant_py}};
             {%- else %}
-            return {{ type_name }}.{{variant.name()|enum_variant_py}};/*(
-                {%- for field in variant.fields() %}
+                // This should be in the enum, but read it for now
+                ({%- for field in variant.fields() %}
                 {{ field|read_fn }}(buf),
-                {%- endfor %}
-            );*/
+                {%- endfor %});
+
+            return {{ type_name }}.{{variant.name()|enum_variant_py}};
             {%- endif %}
         }
         {%- endfor %}
