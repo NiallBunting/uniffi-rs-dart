@@ -13,6 +13,10 @@ Use the tool as usual and use the dart language argument during the build `--lan
 ## Missing features
 
 * It seems that foreign callbacks are not fully supported in dart yet as we can't return a value. Uniffi expects a return int.
+* Checking the methods checksums in the binding file and the binary.
+* Not everything can write back to the buffer (enums).
+* Testing
+* And more! (Please contribute!)
 
 ---
 
