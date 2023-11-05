@@ -3,7 +3,6 @@
 // Declaration and _UniffiConverters for {{ type_name }} Callback Interface
 
 // Defined by CalllbackInterfaceImpl
-typedef {{ callback_handler_class }}Typedef = Void Function(Int64 handle, Int32 method, Pointer<Uint8> args_data, Int32 args_len, Pointer<_UniffiRustBuffer> buffer);
 
 void {{ callback_handler_class}}(int handle, int method, Pointer<Uint8> args_data, int args_len, Pointer<_UniffiRustBuffer> buf_ptr) {
   print("calledback {{callback_handler_class}}");
@@ -14,8 +13,6 @@ void {{ callback_handler_class}}(int handle, int method, Pointer<Uint8> args_dat
   //print("buf_ptr ${buf_ptr}");
 }
 
-final {{ callback_handler_obj }} = NativeCallable<{{ callback_handler_class }}Typedef>.listener({{callback_handler_class}});
-bool {{ callback_handler_obj }}Set = false;
 
 /*
 # Declaration and _UniffiConverters for {{ type_name }} Callback Interface

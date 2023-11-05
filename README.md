@@ -10,6 +10,10 @@ Please contribute to the dart bindings!
 
 Use the tool as usual and use the dart language argument during the build `--language dart`.
 
+## Missing features
+
+* It seems that foreign callbacks are not fully supported in dart yet as we can't return a value. Uniffi expects a return int.
+
 ---
 
 The following README is from the original repo

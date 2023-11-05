@@ -77,3 +77,5 @@ class _UniffiCallbackInterfaceFfiConverter {
      return buf;
   }
 }
+
+typedef _UniffiCallbackHandlerTypedef = Void Function(Uint64 handle, Int32 method, Pointer<Uint8> args_data, Int32 args_len, Pointer<_UniffiRustBuffer> buffer);
