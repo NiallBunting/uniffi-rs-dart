@@ -55,23 +55,32 @@
 DynamicLibrary _uniffiLoadDynamicLibrary() {
 
   final path = Platform.isWindows ? "lib{{ config.cdylib_name() }}.dll" : "lib{{ config.cdylib_name() }}.so";
-  return Platform.isIOS
+  var lib = Platform.isIOS
       ? DynamicLibrary.process()
       : Platform.isMacOS
           ? DynamicLibrary.executable()
           : DynamicLibrary.open(path);
 
+  _uniffi_check_contract_api_version(lib);
+
+  return lib;
 }
 
 final _uniffiLib = _uniffiLoadDynamicLibrary();
 //
-//def _uniffi_check_contract_api_version(lib):
-//    # Get the bindings contract version from our ComponentInterface
-//    bindings_contract_version = {{ ci.uniffi_contract_version() }}
-//    # Get the scaffolding contract version by calling the into the dylib
-//    scaffolding_contract_version = lib.{{ ci.ffi_uniffi_contract_version().name() }}()
-//    if bindings_contract_version != scaffolding_contract_version:
-//        raise InternalError("UniFFI contract version mismatch: try cleaning and rebuilding your project")
+_uniffi_check_contract_api_version(DynamicLibrary lib) {
+
+  _UniffiLib_{{ ci.ffi_uniffi_contract_version().name() }}_d contractFunc = lib.lookup<NativeFunction<_UniffiLib_{{ ci.ffi_uniffi_contract_version().name() }}_c>>('{{ ci.ffi_uniffi_contract_version().name() }}').asFunction();
+
+  // Get the bindings contract version from our ComponentInterface
+  var bindings_contract_version = {{ ci.uniffi_contract_version() }};
+  // Get the scaffolding contract version by calling the into the dylib
+  var scaffolding_contract_version = contractFunc();
+
+  if (bindings_contract_version != scaffolding_contract_version) {
+    throw "UniFFI contract version mismatch: try cleaning and rebuilding your project";
+  }
+}
 //
 //def _uniffi_check_api_checksums(lib):
 //    {%- for (name, expected_checksum) in ci.iter_checksums() %}

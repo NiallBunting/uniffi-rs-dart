@@ -163,6 +163,14 @@ class _UniffiRustBufferBuilder {
     return retVal;
   }
 
+  write_i32(value) {
+    if (this.offset + 4 > this.len) {
+      throw "Not enough bytes.";
+    }
+    buffer.setInt32(this.offset, value);
+    this.offset += 4;
+  }
+
   read_u16() {
     if (this.offset + 2 > this.len) {
       throw "Not enough bytes.";

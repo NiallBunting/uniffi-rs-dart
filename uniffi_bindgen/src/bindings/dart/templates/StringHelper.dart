@@ -41,13 +41,7 @@ class _UniffiConverterString {
       //return utf8_bytes.decode("utf-8")
     }
 
-    _UniffiRustBufferBuilder write(String value) {
-      Pointer<_UniffiRustBuffer> pointer = calloc<_UniffiRustBuffer>();
-      pointer.ref
-        ..capacity = value.length
-        ..len = value.length
-        ..data = value.toNativeUtf8();
-
-      return pointer.ref.buffer;
+    _UniffiRustBufferBuilder write(String value, _UniffiRustBufferBuilder buf) {
+      return buf;
     }
 }
