@@ -95,7 +95,7 @@ class {{ ffi_converter_name }} {
     }
 
     lower(value) {
-      return value;
+      return {{ impl_name }}.pointer;
     }
 
     /*
