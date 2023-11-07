@@ -2,10 +2,10 @@
 class ConcurrentHandleMap {
     //A map where inserting, getting and removing data is synchronized with a lock.
 
-    final Map<int, dynamic> _handles = Map<int, dynamic>();
-    int _currentHandle = 0;
+    static final Map<int, dynamic> _handles = Map<int, dynamic>();
+    static int _currentHandle = 0;
     static const int _stride = 1;
-    final Mutex _lock = Mutex();
+    static final Mutex _lock = Mutex();
 
     ConcurrentHandleMap() {}
 
@@ -43,16 +43,19 @@ class ConcurrentHandleMap {
         }
     }
 }
-/*
+
 
 // Magic number for the Rust proxy to call using the same mechanism as every other method,
 // to free the callback once it's dropped by Rust.
-IDX_CALLBACK_FREE = 0
+const IDX_CALLBACK_FREE = 0;
 // Return codes for callback calls
-_UNIFFI_CALLBACK_SUCCESS = 0
-_UNIFFI_CALLBACK_ERROR = 1
-_UNIFFI_CALLBACK_UNEXPECTED_ERROR = 2
-*/
+
+enum _UNIFFI_CALLBACK {
+  SUCCESS,
+  ERROR,
+  UNEXPECTED_ERROR
+}
+
 
 //CallbackInterfaceRuntime
 class _UniffiCallbackInterfaceFfiConverter {

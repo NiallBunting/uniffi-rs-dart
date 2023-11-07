@@ -6,8 +6,12 @@ class _UniffiConverterBool extends _UniffiConverterPrimitive {
     }
 
     @override
-    _UniffiRustBufferBuilder write(int value, _UniffiRustBufferBuilder buf) {
-        return buf.write_u8(value);
+    _UniffiRustBufferBuilder write(bool value, _UniffiRustBufferBuilder buf) {
+      if(value) {
+        return buf.write_u8(1);
+      } else {
+        return buf.write_u8(0);
+      }
     }
 
     @override

@@ -4,9 +4,7 @@ class _UniffiConverterUInt16 extends _UniffiConverterPrimitiveInt {
         return buf.read_u16();
     }
 
-    _UniffiRustBufferBuilder write(int value) {
-        //buf.data.cast<Int16> = value;
-        Pointer<_UniffiRustBuffer> _rustBuffer = calloc<_UniffiRustBuffer >();
-        return _rustBuffer.ref.buffer;
+    _UniffiRustBufferBuilder write(int value, _UniffiRustBufferBuilder buf) {
+        return buf.write_u16(value);
     }
 }

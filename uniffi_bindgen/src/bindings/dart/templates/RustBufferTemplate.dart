@@ -8,7 +8,7 @@ final class _UniffiRustBuffer extends Struct {
 
   external Pointer<Utf8> data;
 
-  _UniffiRustBufferBuilder get buffer => _UniffiRustBufferBuilder.fromData(data, len);
+  _UniffiRustBufferBuilder get buffer => _UniffiRustBufferBuilder.fromStrData(data, len);
 }
 
 //class _UniffiForeignBytes(ctypes.Structure):
@@ -21,7 +21,13 @@ final class _UniffiRustBuffer extends Struct {
 //        return "_UniffiForeignBytes(len={}, data={})".format(self.len, self.data[0:self.len])
 //
 //
-//class _UniffiRustBufferStream:
+//class _UniffiRustBufferStream {
+// Pointer<Uint8> pointer;
+// int length;
+//
+// _UniffiRustBufferStream(this.pointer, this.length);
+//
+//}
 //    """
 //    Helper for structured reading of bytes from a _UniffiRustBuffer
 //    """
@@ -98,7 +104,13 @@ class _UniffiRustBufferBuilder {
     this.len = len;
   }
 
-  _UniffiRustBufferBuilder.fromData(Pointer<Utf8> data, int len) {
+  _UniffiRustBufferBuilder.fromData(Pointer<Uint8> data, int len) {
+    this.offset = 0;
+    this.len = len;
+    this.buffer = data.asTypedList(len).buffer.asByteData(0);
+  }
+
+  _UniffiRustBufferBuilder.fromStrData(Pointer<Utf8> data, int len) {
     this.offset = 0;
     this.len = len;
     this.buffer = data.cast<Uint8>().asTypedList(len).buffer.asByteData(0);
@@ -167,7 +179,7 @@ class _UniffiRustBufferBuilder {
     if (this.offset + 4 > this.len) {
       throw "Not enough bytes.";
     }
-    buffer.setInt32(this.offset, value);
+    buffer.setInt32(this.offset, value, Endian.big);
     this.offset += 4;
   }
 
@@ -178,6 +190,14 @@ class _UniffiRustBufferBuilder {
     var retVal = buffer.getUint16(this.offset, Endian.big);
     this.offset += 2;
     return retVal;
+  }
+
+  write_u16(value) {
+    if (this.offset + 2 > this.len) {
+      throw "Not enough bytes.";
+    }
+    buffer.setUint16(this.offset, value, Endian.big);
+    this.offset += 2;
   }
 
   read_u32() {
