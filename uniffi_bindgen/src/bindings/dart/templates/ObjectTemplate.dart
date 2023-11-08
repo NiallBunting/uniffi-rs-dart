@@ -94,8 +94,8 @@ class {{ ffi_converter_name }} {
       return {{ impl_name }}.fromPointer(_pointer);
     }
 
-    lower(value) {
-      return {{ impl_name }}.pointer;
+    Pointer lower({{ impl_name }} value) {
+      return value.pointer;
     }
 
     /*
